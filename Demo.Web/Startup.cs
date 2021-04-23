@@ -45,6 +45,10 @@ namespace Demo.Web
                options.AllowSynchronousIO = true;
            });
 
+            services.AddSingleton<Util.Log.LoggerFactory>(x =>
+            {
+                return new NLogService("XmlConfig/NLog.config");
+            });
             
         }
 

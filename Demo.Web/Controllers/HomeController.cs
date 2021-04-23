@@ -9,14 +9,15 @@ namespace Demo.Web.Controllers
 {
     public class HomeController : BaseController
     {
-        public HomeController( )
+        public readonly LoggerFactory _factory;
+        public HomeController(LoggerFactory factory)
         {
-      
+            _factory = factory;
         }
         public IActionResult Index()
         {
-            logger.Info("测试");
-            logger.Error("错误");
+
+            _factory.Info("我的日志");
             return View();
         }
     }

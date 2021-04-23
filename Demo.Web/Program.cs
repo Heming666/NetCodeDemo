@@ -31,10 +31,11 @@ namespace Demo.Web
                         // option.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(20);
                         //  opton.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(1);
                     });
-                }).ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddNLog("XmlConfig/NLog.config");
-                }).UseNLog();
+                });
+        //.ConfigureLogging(logging =>
+        //        {
+        //    logging.ClearProviders();
+        //    logging.AddNLog("XmlConfig/NLog.config");
+        //}).UseNLog();
     }
 }

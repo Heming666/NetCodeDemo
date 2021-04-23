@@ -4,16 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Util.Log;
 
 namespace Demo.Web.Controllers
 {
     public class BaseController : Controller
     {
-
-        public readonly Logger logger;
-        public BaseController()
+        public BaseController() 
         {
-            logger = LogManager.GetCurrentClassLogger();
         }
     }
 }
