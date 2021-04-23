@@ -9,9 +9,9 @@ namespace Util.Log
     public class NLogService : LoggerFactory
     {
         private NLog.Logger _logger;
-        public NLogService(string configPath)
+        public NLogService()
         {
-            _logger = NLog.LogManager.LoadConfiguration(configPath).GetCurrentClassLogger();
+            _logger = NLog.LogManager.GetCurrentClassLogger();
         }
 
         public void Debug(string message)
