@@ -13,11 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Util", "Util", "{444B420C-9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Log", "Util.Log\Util.Log.csproj", "{D0F502B8-0EA6-4ACA-8258-E9E2487ABC06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.Factory", "Repository.Factory\Repository.Factory.csproj", "{C516DC09-5BEC-456A-8578-7C8C07571C51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository.Factory", "Repository.Factory\Repository.Factory.csproj", "{C516DC09-5BEC-456A-8578-7C8C07571C51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripository.EF", "Ripository.EF\Ripository.EF.csproj", "{A7FB973C-C332-40CE-A18F-E2167DDD181E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository.EF", "Ripository.EF\Repository.EF.csproj", "{A7FB973C-C332-40CE-A18F-E2167DDD181E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Extension", "Util.Extension\Util.Extension.csproj", "{5818E950-09DE-4DA2-AF7B-77F418BBDD57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Extension", "Util.Extension\Util.Extension.csproj", "{5818E950-09DE-4DA2-AF7B-77F418BBDD57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.Entity", "Repository.Entity\Repository.Entity.csproj", "{A0C8DB32-D049-4474-8DC5-E8A36178D2D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{5818E950-09DE-4DA2-AF7B-77F418BBDD57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5818E950-09DE-4DA2-AF7B-77F418BBDD57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5818E950-09DE-4DA2-AF7B-77F418BBDD57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0C8DB32-D049-4474-8DC5-E8A36178D2D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0C8DB32-D049-4474-8DC5-E8A36178D2D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0C8DB32-D049-4474-8DC5-E8A36178D2D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0C8DB32-D049-4474-8DC5-E8A36178D2D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{C516DC09-5BEC-456A-8578-7C8C07571C51} = {A7BC1388-1E6F-45A5-B977-94DD173E6F73}
 		{A7FB973C-C332-40CE-A18F-E2167DDD181E} = {A7BC1388-1E6F-45A5-B977-94DD173E6F73}
 		{5818E950-09DE-4DA2-AF7B-77F418BBDD57} = {444B420C-98A2-492F-9D45-EFFCD4A5E823}
+		{A0C8DB32-D049-4474-8DC5-E8A36178D2D1} = {A7BC1388-1E6F-45A5-B977-94DD173E6F73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36ADBBFF-C964-469A-A089-BCFAF1AA2AAE}

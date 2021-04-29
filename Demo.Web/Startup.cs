@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Repository.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,15 +23,15 @@ namespace Demo.Web
         /// <summary>
         /// 配置文件
         /// </summary>
-        public IConfiguration _configuration { get; set; }
+        public IConfiguration Configuration { get; set; }
         /// <summary>
         /// 环境变量
         /// </summary>
-        public IWebHostEnvironment _env { get; set; }
+        public IWebHostEnvironment Env { get; set; }
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            _configuration = configuration;
-            _env = env;
+            Configuration = configuration;
+            Env = env;
 
         }
 
@@ -45,17 +47,37 @@ namespace Demo.Web
                options.AllowSynchronousIO = true;
            });
 
-            services.AddSingleton<Util.Log.LoggerFactory>(x =>
+            services.AddSingleton<Util.Log.ILoggerFactory>(x =>
             {
                 return new NLogService("XmlConfig/NLog.config");
             });
-            
+
+            //注入mysqlDbcontext
+            services.AddDbContext<MySqlDBContext>(option =>
+            {
+                option.UseMySql(
+                    Configuration.GetConnectionString("mysql"),
+                    ServerVersion.AutoDetect(Configuration.GetConnectionString("mysql")),
+                    option =>
+                    {
+                    });
+            });
+            //注入oracleDbcontext
+            services.AddDbContext<MySqlDBContext>(option =>
+            {
+                option.UseOracle(
+                    Configuration.GetConnectionString("oracle"),
+                    option =>
+                    {
+                        //数据设置
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, Microsoft.Extensions.Logging.ILoggerFactory loggerFactory)
         {
-            if (_env.IsDevelopment())
+            if (Env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -70,8 +92,10 @@ namespace Demo.Web
             app.UseSession();
             app.UseResponseCompression();//响应压缩， 必须注册中间件services.AddResponseCompression();
             app.UseResponseCaching();
-
-
+            app.Run(async context =>
+            {
+                loggerFactory.CreateLogger("App").LogInformation("Logger");
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

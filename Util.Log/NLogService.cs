@@ -2,9 +2,9 @@
 
 namespace Util.Log
 {
-    public class NLogService : LoggerFactory
+    public class NLogService : ILoggerFactory
     {
-        private NLog.Logger _logger;
+        private readonly NLog.Logger _logger;
         public NLogService(string configPath)
         {
             _logger = NLog.LogManager.LoadConfiguration(configPath).GetCurrentClassLogger();

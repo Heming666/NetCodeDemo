@@ -20,6 +20,7 @@ namespace Demo.Web
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseKestrel();
                     webBuilder.UseStartup<Startup>();
                     webBuilder.ConfigureKestrel(option =>
                     {

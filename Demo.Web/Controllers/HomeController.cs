@@ -9,8 +9,8 @@ namespace Demo.Web.Controllers
 {
     public class HomeController : BaseController
     {
-        public readonly LoggerFactory _factory;
-        public HomeController(LoggerFactory factory)
+        public readonly ILoggerFactory _factory;
+        public HomeController(ILoggerFactory factory)
         {
             _factory = factory;
         }
