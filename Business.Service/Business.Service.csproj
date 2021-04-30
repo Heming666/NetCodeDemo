@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Business.IService\Business.IService.csproj" />
+    <ProjectReference Include="..\Repository.Entity\Repository.Entity.csproj" />
+    <ProjectReference Include="..\Repository.Factory\Repository.Factory.csproj" />
+    <ProjectReference Include="..\Ripository.EF\Repository.EF.csproj" />
+    <ProjectReference Include="..\Util.Extension\Util.Extension.csproj" />
+    <ProjectReference Include="..\Util.Log\Util.Log.csproj" />
+  </ItemGroup>
+
+</Project>
