@@ -47,25 +47,13 @@ namespace Repository.Entity.Models
         /// <summary>
         /// 用户昵称
         /// </summary>
-        [Comment("用户昵称"),MaxLength(500)]
+        [Comment("照片"),MaxLength(500)]
         public string  Photo { get; set; }
         /// <summary>
         /// 手机号
         /// </summary>
         [RegularExpression("^1[34578]\\d{9}$",ErrorMessage ="请输入正确的手机号"),MaxLength(11),Comment("手机号")]
         public string  Phone { get; set; }
-        /// <summary>
-        /// 部门ID
-        /// </summary>
-        [Comment("部门ID"), MaxLength(8),Column("DeptId")]
-        public int?  DeptId { get; set; }
-        /// <summary>
-        /// 部门名称
-        /// </summary>
-        [Comment("部门名称"), MaxLength(100)]
-        public string DeptName { get; set; }
-        [Comment("部门编码"), MaxLength(100)]
-        public string DeptCode { get; set; }
         public DateTime CreateDate { get; set; }
 
         public DateTime  ModifyDate { get; set; }

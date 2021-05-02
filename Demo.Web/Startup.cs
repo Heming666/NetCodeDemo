@@ -1,12 +1,15 @@
+using Business.IService.Base;
+using Business.Service.Base;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Repository.EF;
+using Repository.Factory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +45,7 @@ namespace Demo.Web
             services.AddResponseCompression();
             services.AddControllersWithViews();
             services.AddSession();
+            services.AddMemoryCache();
             services.Configure<IISServerOptions>(options =>
            {
                options.AllowSynchronousIO = true;
@@ -51,7 +55,7 @@ namespace Demo.Web
             {
                 return new NLogService("XmlConfig/NLog.config");
             });
-
+            services.AddScoped<DbContext, MySqlDBContext>();
             //注入mysqlDbcontext
             services.AddDbContext<MySqlDBContext>(option =>
             {
@@ -63,7 +67,7 @@ namespace Demo.Web
                     });
             });
             //注入oracleDbcontext
-            services.AddDbContext<MySqlDBContext>(option =>
+            services.AddDbContext<OracleDBContext>(option =>
             {
                 option.UseOracle(
                     Configuration.GetConnectionString("oracle"),
@@ -72,10 +76,12 @@ namespace Demo.Web
                         //数据设置
                     });
             });
+            services.AddScoped<IRepositoryFactory, RepositoryFactory>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, Microsoft.Extensions.Logging.ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, Util.Log.ILoggerFactory loggerFactory)
         {
             if (Env.IsDevelopment())
             {
@@ -92,14 +98,15 @@ namespace Demo.Web
             app.UseSession();
             app.UseResponseCompression();//响应压缩， 必须注册中间件services.AddResponseCompression();
             app.UseResponseCaching();
-            app.Run(async context =>
-            {
-                loggerFactory.CreateLogger("App").LogInformation("Logger");
-            });
+            app.UseExceptionHandler(option => option.Run(async context => {
+                await Task.Run(() => loggerFactory.Error(context.Features.Get<IExceptionHandlerFeature>())
+                );
+            })
+            );
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                                                                    name: "MyArea",
+                                                                       name: "MyArea",
                                                                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });

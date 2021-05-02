@@ -7,13 +7,16 @@ using System.Threading.Tasks;
 
 namespace Repository.Factory
 {
-    public  class IDataBase<TEntity> where TEntity : class,new()
+    public abstract class IDataBase<TEntity> where TEntity : class
     {
         private readonly DbContext db;
+        public IDataBase()
+        {
+        }
         public IDataBase(DbContext dbContext)
             {
             db = dbContext;
-            db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;//不需要更新从数据库中检索到的实体
+            //db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;//不需要更新从数据库中检索到的实体
         }
         public IQueryable<TEntity> IQueryable(Expression<Func<TEntity, bool>> expression)
         {
