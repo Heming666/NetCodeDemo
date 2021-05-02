@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Util.Log;
+using Newtonsoft.Json;
 
 namespace Demo.Web
 {
@@ -99,7 +100,7 @@ namespace Demo.Web
             app.UseResponseCompression();//响应压缩， 必须注册中间件services.AddResponseCompression();
             app.UseResponseCaching();
             app.UseExceptionHandler(option => option.Run(async context => {
-                await Task.Run(() => loggerFactory.Error(context.Features.Get<IExceptionHandlerFeature>())
+                await Task.Run(() => loggerFactory.Error( context.Features.Get<IExceptionHandlerFeature>().Error,"全局错误")
                 );
             })
             );

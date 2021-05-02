@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<!--[if IE 7]> <html lang="en" class="ie7"> <![endif]-->
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+    <title>中国老年健康产业</title>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- CSS Global Compulsory-->
+    <link rel="stylesheet" href="/plugins/HomeLayout/plugins/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/plugins/HomeLayout/css/style.css" />
+    <link rel="stylesheet" href="/plugins/HomeLayout/css/headers/header1.css" />
+    <link rel="stylesheet" href="/plugins/HomeLayout/plugins/bootstrap/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="/plugins/HomeLayout/css/style_responsive.css" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <!-- CSS Implementing Plugins -->
+    <link rel="stylesheet" href="/plugins/HomeLayout/plugins/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="/plugins/HomeLayout/plugins/flexslider/flexslider.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/plugins/HomeLayout/plugins/parallax-slider/css/parallax-slider.css" type="text/css" />
+    <link rel="stylesheet" href="/plugins/HomeLayout/plugins/bxslider/jquery.bxslider.css" />
+    <link href="~/plugins/bootstrapValidator/bootstrapValidator.min.css" rel="stylesheet" />
+    <link href="~/plugins/ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <link href="~/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <!-- CSS Theme -->
+    <link rel="stylesheet" href="/plugins/HomeLayout/css/themes/default.css" id="style_color" />
+
+    <link href="~/plugins/Angular/angular.css" rel="stylesheet" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+    <!-- JS Global Compulsory -->
+    <script type="text/javascript" src="/plugins/HomeLayout/js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="/plugins/HomeLayout/js/modernizr.custom.js"></script>
+    <script type="text/javascript" src="/plugins/HomeLayout/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/plugins/bootstrapValidator/bootstrapValidator.min.js"></script>
+    <!-- JS Implementing Plugins -->
+    <script type="text/javascript" src="/plugins/HomeLayout/plugins/flexslider/jquery.flexslider-min.js"></script>
+    <script type="text/javascript" src="/plugins/HomeLayout/plugins/parallax-slider/js/modernizr.js"></script>
+    <script type="text/javascript" src="/plugins/HomeLayout/plugins/parallax-slider/js/jquery.cslider.js"></script>
+    <script type="text/javascript" src="/plugins/HomeLayout/plugins/bxslider/jquery.bxslider.js"></script>
+    <script type="text/javascript" src="/plugins/HomeLayout/plugins/back-to-top.js"></script>
+    <!-- JS Page Level -->
+    <script type="text/javascript" src="/plugins/HomeLayout/js/app.js"></script>
+	<script src="~/plugins/layer/layer.js"></script>
+    <script src="~/plugins/datepicker/bootstrap-datepicker.js"></script>
+    @*<style>
+        .fixedNav {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: 1030;
+            background-color: white;
+        }
+    </style>*@
+</head>
+<body>
+@*<div style="margin-bottom: 87px;"></div>*@
+    @*<div id="navbar" class="row-fluid fixedNav">*@
+        <!--=== Top ===-->
+        <div class="top" >
+            <div class="container">
+                <ul class="loginbar pull-right">
+                    <li><a href="/Home/Index" id="ReturnIndex" class="btn-u" style="font-size: 14px;border-radius:5px;"><b>返回首页</b></a></li>
+                    <li><a href="/Account/Pricing" class="btn-u" style="border-radius:5px;"><span style="font-size: 14px;"><b>会员说明</b></span></a></li>
+                    <li><a href="/Account/MemberLogin" class="btn-u" style="border-radius:5px;"><span style="font-size: 14px;"><b>会员登录</b></span></a></li>
+                </ul>
+            </div>
+        </div><!--/top-->
+        <!--=== End Top ===-->
+        <!--=== Header ===-->
+        <div class="header">
+            <div class="container">
+                <!-- Logo -->
+                <div class="logo">
+                    <a href="/Home/Index"><img id="logo-header" src="~/Img/logo.png" alt="Logo"  style="max-width: 223px;"/></a>
+                </div><!-- /logo -->
+                <!-- Menu -->
+                <div class="navbar">
+                    <div class="navbar-inner">
+
+                    </div><!-- /navbar-inner -->
+                </div><!-- /navbar -->
+            </div><!-- /container -->
+        </div><!--/header -->
+        <!--=== End Header ===-->
+        <div class="breadcrumbs margin-bottom-40">
+            <div class="container">
+                <h3 class="pull-left" id="HomeTitle"></h3>
+                <div class="pull-right hidden" style="padding-top: 30px;" id="HomeSearch">
+                    <form class="form-search">
+                        <input type="text" class="border-radius-none input-medium search-query" style="width: 200px" />
+                        <button class="btn-u"><i class="icon-search search-btn"></i></button>
+                    </form>
+                </div>
+            </div><!--/container-->
+        </div><!--/breadcrumbs-->
+    @*</div>*@
+        <div class="container" style="min-height: 800px;">
+            @RenderBody()
+        </div><!--/container-->
+        <!--=== End Content Part ===-->
+        <!--=== Footer ===-->
+        @Html.PartialAsync("Home/_HomeFooter")
+        <script src="~/plugins/Angular/angular.min.js"></script>
+        <script src="~/Scripts/GlobalConfig.js"></script>
+        <script src="~/Scripts/Home/EmptyLayout.js"></script>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                App.init();
+                //App.initSliders();
+                //App.initBxSlider1();
+                EmptyLayout.init();
+            });
+        </script>
+        <!--[if lt IE 9]>
+            <script src="/plugins/HomeLayout/js/respond.js"></script>
+        <![endif]-->
+</body>
+</html> 
