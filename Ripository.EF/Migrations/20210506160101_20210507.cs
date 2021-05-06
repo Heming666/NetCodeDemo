@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Repository.EF.Migrations
 {
-    public partial class MYSQL : Migration
+    public partial class _20210507 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,11 +48,6 @@ namespace Repository.EF.Migrations
                         .Annotation("MySql:CharSet", "utf8"),
                     Phone = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: true, comment: "手机号")
                         .Annotation("MySql:CharSet", "utf8"),
-                    DeptId = table.Column<int>(type: "int", maxLength: 8, nullable: true, comment: "部门ID"),
-                    DeptName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true, comment: "部门名称")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    DeptCode = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true, comment: "部门编码")
-                        .Annotation("MySql:CharSet", "utf8"),
                     CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ModifyDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DeptInfoID = table.Column<int>(type: "int", nullable: true),
@@ -75,6 +70,36 @@ namespace Repository.EF.Migrations
                         onDelete: ReferentialAction.Restrict);
                 },
                 comment: "用户信息表")
+                .Annotation("MySql:CharSet", "utf8");
+
+            migrationBuilder.CreateTable(
+                name: "User_ConsumeEntity",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ConsumeName = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false, comment: "消费名称")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Amount = table.Column<decimal>(type: "decimal(8,2)", nullable: false, comment: "金额"),
+                    Place = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true, comment: "消费地点")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Remark = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true, comment: "备注")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Classify = table.Column<int>(type: "int", nullable: false, comment: "分类"),
+                    CreateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false, comment: "消费时间"),
+                    UserID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User_ConsumeEntity", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_User_ConsumeEntity_Base_UserInfo_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Base_UserInfo",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "消费支出明细表")
                 .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateIndex(
@@ -108,10 +133,23 @@ namespace Repository.EF.Migrations
                 table: "Base_UserInfo",
                 column: "UserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "Index_ID1",
+                table: "User_ConsumeEntity",
+                column: "ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_ConsumeEntity_UserID",
+                table: "User_ConsumeEntity",
+                column: "UserID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "User_ConsumeEntity");
+
             migrationBuilder.DropTable(
                 name: "Base_UserInfo");
 

@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-using Repository.Entity.Models;
+using Repository.Entity.Models.Base;
+using Repository.Entity.Models.Consume;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,9 +49,11 @@ namespace Repository.EF
             #region 用户表 UserEntity
             modelBuilder.Entity<UserEntity>(entity =>
             {
+                entity.ToTable("Base_UserInfo");
                 entity.HasOne(x => x.DeptInfo).WithMany(p => p.Users).IsRequired();
                 entity.HasIndex(x => x.UserName).IsUnique();
                 entity.HasIndex(x => x.Account).IsUnique();
+                entity.HasMany(x => x.ConsumeEntitys).WithOne().OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
             //.HasDefaultValueSql("NOW()");  数据库函数
@@ -58,9 +61,25 @@ namespace Repository.EF
             #region 部门表
             modelBuilder.Entity<DepartmentEntity>().ToTable("Base_Department").HasMany(x => x.Users).WithOne().OnDelete(DeleteBehavior.Cascade);
             #endregion
+            #region 消费支出明细表
+            modelBuilder.Entity<ConsumeEntity>(entity => {
+                entity.ToTable("User_ConsumeEntity").HasOne(x => x.User).WithMany(x => x.ConsumeEntitys);
+                entity.Property(x => x.Amount).HasColumnType("decimal(8,2)");
+            });
+            #endregion
         }
 
+        /// <summary>
+        /// 用户表
+        /// </summary>
         public DbSet<UserEntity> Users { get; set; }
+        /// <summary>
+        /// 部门表
+        /// </summary>
         public DbSet<DepartmentEntity> Departments { get; set; }
+        /// <summary>
+        /// 用户支出明细表
+        /// </summary>
+        public DbSet<ConsumeEntity> Consumies { get; set; }
     }
 }

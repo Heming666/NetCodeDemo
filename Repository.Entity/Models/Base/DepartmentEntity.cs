@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository.Entity.Models
+namespace Repository.Entity.Models.Base
 {
     [Table("Base_Department"), Comment("部门表"), Index(nameof(ID), Name = "Index_ID")]
     public class DepartmentEntity

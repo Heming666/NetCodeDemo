@@ -9,8 +9,8 @@ using Repository.EF;
 namespace Repository.EF.Migrations
 {
     [DbContext(typeof(MySqlDBContext))]
-    [Migration("20210502051911_2010502")]
-    partial class _2010502
+    [Migration("20210506160101_20210507")]
+    partial class _20210507
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,7 +20,7 @@ namespace Repository.EF.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.5");
 
-            modelBuilder.Entity("Repository.Entity.Models.DepartmentEntity", b =>
+            modelBuilder.Entity("Repository.Entity.Models.Base.DepartmentEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -52,7 +52,7 @@ namespace Repository.EF.Migrations
                         .HasComment("部门表");
                 });
 
-            modelBuilder.Entity("Repository.Entity.Models.UserEntity", b =>
+            modelBuilder.Entity("Repository.Entity.Models.Base.UserEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -123,24 +123,90 @@ namespace Repository.EF.Migrations
                         .HasComment("用户信息表");
                 });
 
-            modelBuilder.Entity("Repository.Entity.Models.UserEntity", b =>
+            modelBuilder.Entity("Repository.Entity.Models.Consume.ConsumeEntity", b =>
                 {
-                    b.HasOne("Repository.Entity.Models.DepartmentEntity", null)
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(8,2)")
+                        .HasComment("金额");
+
+                    b.Property<int>("Classify")
+                        .HasColumnType("int")
+                        .HasComment("分类");
+
+                    b.Property<string>("ConsumeName")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasComment("消费名称");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime(6)")
+                        .HasComment("消费时间");
+
+                    b.Property<string>("Place")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasComment("消费地点");
+
+                    b.Property<string>("Remark")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasComment("备注");
+
+                    b.Property<int?>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("UserID");
+
+                    b.HasIndex(new[] { "ID" }, "Index_ID")
+                        .HasDatabaseName("Index_ID1");
+
+                    b.ToTable("User_ConsumeEntity");
+
+                    b
+                        .HasComment("消费支出明细表");
+                });
+
+            modelBuilder.Entity("Repository.Entity.Models.Base.UserEntity", b =>
+                {
+                    b.HasOne("Repository.Entity.Models.Base.DepartmentEntity", null)
                         .WithMany("Users")
                         .HasForeignKey("DepartmentEntityID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Repository.Entity.Models.DepartmentEntity", "DeptInfo")
+                    b.HasOne("Repository.Entity.Models.Base.DepartmentEntity", "DeptInfo")
                         .WithMany()
                         .HasForeignKey("DeptInfoID");
 
                     b.Navigation("DeptInfo");
                 });
 
-            modelBuilder.Entity("Repository.Entity.Models.DepartmentEntity", b =>
+            modelBuilder.Entity("Repository.Entity.Models.Consume.ConsumeEntity", b =>
+                {
+                    b.HasOne("Repository.Entity.Models.Base.UserEntity", "User")
+                        .WithMany("ConsumeEntitys")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Repository.Entity.Models.Base.DepartmentEntity", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Repository.Entity.Models.Base.UserEntity", b =>
+                {
+                    b.Navigation("ConsumeEntitys");
                 });
 #pragma warning restore 612, 618
         }

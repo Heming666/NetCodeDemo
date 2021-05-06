@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Repository.Entity.Models.Consume;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository.Entity.Models
+namespace Repository.Entity.Models.Base
 {
     [Comment("用户信息表")]
     [Table("Base_UserInfo"),Index(nameof(Account), Name = "Index_Account")]
@@ -59,6 +60,8 @@ namespace Repository.Entity.Models
         public DateTime  ModifyDate { get; set; }
 
         public DepartmentEntity DeptInfo { get; set; }
+
+        public List<ConsumeEntity> ConsumeEntitys { get; set; }
     }
 
     public enum Gender

@@ -1,6 +1,6 @@
 ﻿using Business.IService.Base;
 using Microsoft.EntityFrameworkCore;
-using Repository.Entity.Models;
+using Repository.Entity.Models.Base;
 using Repository.Factory;
 using System;
 using System.Collections.Generic;
