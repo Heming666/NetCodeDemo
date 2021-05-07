@@ -9,24 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\lib\新文件夹\**" />
-    <Compile Remove="wwwroot\新文件夹\**" />
-    <Content Remove="wwwroot\lib\新文件夹\**" />
-    <Content Remove="wwwroot\新文件夹\**" />
-    <EmbeddedResource Remove="wwwroot\lib\新文件夹\**" />
-    <EmbeddedResource Remove="wwwroot\新文件夹\**" />
-    <None Remove="wwwroot\lib\新文件夹\**" />
-    <None Remove="wwwroot\新文件夹\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.2" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.12.0" />
@@ -45,6 +32,10 @@
     <None Update="C:\Users\何明\.nuget\packages\nlog.config\4.7.9\contentFiles\any\any\NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
