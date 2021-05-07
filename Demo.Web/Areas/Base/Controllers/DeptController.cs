@@ -1,10 +1,12 @@
 ﻿using Business.IService.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Entity.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Util.Extension;
 using Util.Log;
 
 namespace Demo.Web.Areas.Base.Controllers
@@ -22,7 +24,8 @@ namespace Demo.Web.Areas.Base.Controllers
         // GET: DeptController
         public ActionResult Index()
         {
-            return View();
+            List<DepartmentEntity> depts = _deptService.GetList(ExpressionExtension.True<DepartmentEntity>());
+            return View(depts);
         }
 
         // GET: DeptController/Details/5

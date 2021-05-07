@@ -19,7 +19,6 @@ namespace Demo.Web.Controllers
         }
         public IActionResult Index()
         {
-            _userService.aaa();
             _factory.Info("我的日志");
             return View();
         }

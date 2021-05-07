@@ -1,4 +1,5 @@
 ﻿using Repository.Entity.Models;
+using Repository.Entity.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace Business.IService.Base
 {
     public interface IDepartmentService
     {
+        List<DepartmentEntity> GetList(System.Linq.Expressions.Expression<Func<DepartmentEntity, bool>> Exception);
     }
 }

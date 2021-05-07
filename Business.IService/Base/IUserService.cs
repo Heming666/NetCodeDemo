@@ -10,6 +10,6 @@ namespace Business.IService.Base
 {
    public interface IUserService
     {
-        void aaa();
+
     }
 }

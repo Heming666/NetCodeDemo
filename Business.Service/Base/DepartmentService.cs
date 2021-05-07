@@ -5,15 +5,21 @@ using Repository.Factory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Business.Service.Base
 {
-    public class DepartmentService : IDataBase<UserEntity>, IDepartmentService
+    public class DepartmentService : BaseService<UserEntity>, IDepartmentService
     {
-        public DepartmentService(DbContext dbContext) : base(dbContext)
+        public DepartmentService(IRepositoryFactory repositoryFactory, DbContext mydbcontext) : base(repositoryFactory, mydbcontext)
         {
+        }
+
+        public List<DepartmentEntity> GetList(Expression<Func<DepartmentEntity, bool>> Exception)
+        {
+            return new List<DepartmentEntity>();
         }
     }
 }
