@@ -10,7 +10,7 @@ using Repository.EF;
 namespace Repository.EF.Migrations
 {
     [DbContext(typeof(MSSQLDBContext))]
-    [Migration("20210507033624_mssql")]
+    [Migration("20210507124010_mssql")]
     partial class mssql
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -149,6 +149,10 @@ namespace Repository.EF.Migrations
                         .HasComment("消费名称");
 
                     b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2")
+                        .HasComment("创建时间");
+
+                    b.Property<DateTime>("LogTime")
                         .HasColumnType("datetime2")
                         .HasComment("消费时间");
 

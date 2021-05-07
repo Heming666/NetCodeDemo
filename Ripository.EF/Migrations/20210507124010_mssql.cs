@@ -70,7 +70,8 @@ namespace Repository.EF.Migrations
                     Place = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true, comment: "消费地点"),
                     Remark = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true, comment: "备注"),
                     Classify = table.Column<int>(type: "int", nullable: false, comment: "分类"),
-                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "消费时间"),
+                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "创建时间"),
+                    LogTime = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "消费时间"),
                     UserID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

@@ -148,6 +148,10 @@ namespace Repository.EF.Migrations
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2")
+                        .HasComment("创建时间");
+
+                    b.Property<DateTime>("LogTime")
+                        .HasColumnType("datetime2")
                         .HasComment("消费时间");
 
                     b.Property<string>("Place")
