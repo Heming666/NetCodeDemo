@@ -56,24 +56,35 @@ namespace Demo.Web
             {
                 return new NLogService("XmlConfig/NLog.config");
             });
-            services.AddScoped<DbContext, MySqlDBContext>();
-            //注入mysqlDbcontext
-            services.AddDbContext<MySqlDBContext>(option =>
+            services.AddScoped<DbContext, MSSQLDBContext>();
+            //services.AddScoped<DbContext, MySqlDBContext>();
+            ////注入mysqlDbcontext
+            //services.AddDbContext<MySqlDBContext>(option =>
+            //{
+            //    option.UseMySql(
+            //        Configuration.GetConnectionString("mysql"),
+            //        ServerVersion.AutoDetect(Configuration.GetConnectionString("mysql")),
+            //        option =>
+            //        {
+            //        });
+            //});
+            ////注入oracleDbcontext
+            //services.AddDbContext<OracleDBContext>(option =>
+            //{
+            //    option.UseOracle(
+            //        Configuration.GetConnectionString("oracle"),
+            //        option =>
+            //        {
+            //            //数据设置
+            //        });
+            //});
+            services.AddDbContext<MSSQLDBContext>(option =>
             {
-                option.UseMySql(
-                    Configuration.GetConnectionString("mysql"),
-                    ServerVersion.AutoDetect(Configuration.GetConnectionString("mysql")),
+                option.UseSqlServer(
+                    Configuration.GetConnectionString("mssql"),
                     option =>
                     {
-                    });
-            });
-            //注入oracleDbcontext
-            services.AddDbContext<OracleDBContext>(option =>
-            {
-                option.UseOracle(
-                    Configuration.GetConnectionString("oracle"),
-                    option =>
-                    {
+                        
                         //数据设置
                     });
             });
