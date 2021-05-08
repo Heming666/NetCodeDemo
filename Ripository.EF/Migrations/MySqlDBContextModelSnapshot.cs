@@ -66,10 +66,7 @@ namespace Repository.EF.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("DepartmentEntityID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("DeptInfoID")
+                    b.Property<int>("DeptId")
                         .HasColumnType("int");
 
                     b.Property<int?>("Gender")
@@ -106,9 +103,7 @@ namespace Repository.EF.Migrations
                     b.HasIndex("Account")
                         .IsUnique();
 
-                    b.HasIndex("DepartmentEntityID");
-
-                    b.HasIndex("DeptInfoID");
+                    b.HasIndex("DeptId");
 
                     b.HasIndex("UserName")
                         .IsUnique();
@@ -160,12 +155,12 @@ namespace Repository.EF.Migrations
                         .HasColumnType("varchar(500)")
                         .HasComment("备注");
 
-                    b.Property<int?>("UserID")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserId");
 
                     b.HasIndex(new[] { "ID" }, "Index_ID")
                         .HasDatabaseName("Index_ID1");
@@ -178,15 +173,11 @@ namespace Repository.EF.Migrations
 
             modelBuilder.Entity("Repository.Entity.Models.Base.UserEntity", b =>
                 {
-                    b.HasOne("Repository.Entity.Models.Base.DepartmentEntity", null)
+                    b.HasOne("Repository.Entity.Models.Base.DepartmentEntity", "DeptInfo")
                         .WithMany("Users")
-                        .HasForeignKey("DepartmentEntityID")
+                        .HasForeignKey("DeptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Repository.Entity.Models.Base.DepartmentEntity", "DeptInfo")
-                        .WithMany()
-                        .HasForeignKey("DeptInfoID");
 
                     b.Navigation("DeptInfo");
                 });
@@ -195,8 +186,9 @@ namespace Repository.EF.Migrations
                 {
                     b.HasOne("Repository.Entity.Models.Base.UserEntity", "User")
                         .WithMany("ConsumeEntitys")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

@@ -28,7 +28,8 @@ namespace Repository.Entity.Models.Base
         public DateTime  CreateDate { get; set; }
         [Display(Name = "修改时间")]
         public DateTime ModifyDate { get; set; }
-    
+
+
         public List<UserEntity> Users { get; set; }
     }
 }

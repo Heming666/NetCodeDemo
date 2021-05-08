@@ -17,6 +17,8 @@ using System.Threading.Tasks;
 using Util.Log;
 using Newtonsoft.Json;
 using System.Net;
+using Business.Service.Customer;
+using Business.IService.Customer;
 
 namespace Demo.Web
 {
@@ -44,6 +46,10 @@ namespace Demo.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<Util.Log.ILoggerFactory>(x =>
+            {
+                return new NLogService("XmlConfig/NLog.config");
+            });
             services.AddResponseCompression();
             services.AddControllersWithViews();
             services.AddSession();
@@ -52,11 +58,6 @@ namespace Demo.Web
            {
                options.AllowSynchronousIO = true;
            });
-
-            services.AddSingleton<Util.Log.ILoggerFactory>(x =>
-            {
-                return new NLogService("XmlConfig/NLog.config");
-            });
             services.AddScoped<DbContext, MySqlDBContext>();
             //×¢ÈëmysqlDbcontext
             services.AddDbContext<MySqlDBContext>(option =>
@@ -90,6 +91,7 @@ namespace Demo.Web
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
+            services.AddScoped<IComsumeService, ComsumeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

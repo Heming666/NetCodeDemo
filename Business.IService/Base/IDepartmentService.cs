@@ -11,5 +11,6 @@ namespace Business.IService.Base
     public interface IDepartmentService
     {
         List<DepartmentEntity> GetList(System.Linq.Expressions.Expression<Func<DepartmentEntity, bool>> Exception);
+        void Insert(DepartmentEntity entity);
     }
 }

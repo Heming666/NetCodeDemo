@@ -49,7 +49,7 @@ namespace Demo.Web.Areas.Base.Controllers
         {
             try
             {
-                
+                _deptService.Insert(entity);
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -50,24 +50,17 @@ namespace Repository.EF.Migrations
                         .Annotation("MySql:CharSet", "utf8"),
                     CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ModifyDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    DeptInfoID = table.Column<int>(type: "int", nullable: true),
-                    DepartmentEntityID = table.Column<int>(type: "int", nullable: false)
+                    DeptId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Base_UserInfo", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Base_UserInfo_Base_Department_DepartmentEntityID",
-                        column: x => x.DepartmentEntityID,
+                        name: "FK_Base_UserInfo_Base_Department_DeptId",
+                        column: x => x.DeptId,
                         principalTable: "Base_Department",
                         principalColumn: "DeptId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Base_UserInfo_Base_Department_DeptInfoID",
-                        column: x => x.DeptInfoID,
-                        principalTable: "Base_Department",
-                        principalColumn: "DeptId",
-                        onDelete: ReferentialAction.Restrict);
                 },
                 comment: "用户信息表")
                 .Annotation("MySql:CharSet", "utf8");
@@ -88,14 +81,14 @@ namespace Repository.EF.Migrations
                     Classify = table.Column<int>(type: "int", nullable: false, comment: "分类"),
                     CreateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false, comment: "创建时间"),
                     LogTime = table.Column<DateTime>(type: "datetime(6)", nullable: false, comment: "消费时间"),
-                    UserID = table.Column<int>(type: "int", nullable: true)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User_ConsumeEntity", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_User_ConsumeEntity_Base_UserInfo_UserID",
-                        column: x => x.UserID,
+                        name: "FK_User_ConsumeEntity_Base_UserInfo_UserId",
+                        column: x => x.UserId,
                         principalTable: "Base_UserInfo",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
@@ -120,14 +113,9 @@ namespace Repository.EF.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Base_UserInfo_DepartmentEntityID",
+                name: "IX_Base_UserInfo_DeptId",
                 table: "Base_UserInfo",
-                column: "DepartmentEntityID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Base_UserInfo_DeptInfoID",
-                table: "Base_UserInfo",
-                column: "DeptInfoID");
+                column: "DeptId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Base_UserInfo_UserName",
@@ -141,9 +129,9 @@ namespace Repository.EF.Migrations
                 column: "ID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_ConsumeEntity_UserID",
+                name: "IX_User_ConsumeEntity_UserId",
                 table: "User_ConsumeEntity",
-                column: "UserID");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
