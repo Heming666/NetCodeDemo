@@ -2,47 +2,43 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.EF;
 
 namespace Repository.EF.Migrations
 {
-    [DbContext(typeof(MSSQLDBContext))]
-    [Migration("20210507150237_mssql11")]
-    partial class mssql11
+    [DbContext(typeof(MySqlDBContext))]
+    partial class MySqlDBContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.5")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasCharSet("utf8", DelegationModes.ApplyToAll)
+                .HasAnnotation("Relational:MaxIdentifierLength", 64)
+                .HasAnnotation("ProductVersion", "5.0.5");
 
             modelBuilder.Entity("Repository.Entity.Models.Base.DepartmentEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("DeptId")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("DeptId");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("DeptCode")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("DeptName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("ModifyDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("ID");
 
@@ -59,17 +55,16 @@ namespace Repository.EF.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasComment("主键")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasComment("主键");
 
                     b.Property<string>("Account")
                         .IsRequired()
                         .HasMaxLength(24)
-                        .HasColumnType("nvarchar(24)")
+                        .HasColumnType("varchar(24)")
                         .HasComment("账户");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("DepartmentEntityID")
                         .HasColumnType("int");
@@ -82,28 +77,28 @@ namespace Repository.EF.Migrations
                         .HasComment("性别");
 
                     b.Property<DateTime>("ModifyDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("PassWord")
                         .IsRequired()
                         .HasMaxLength(24)
-                        .HasColumnType("nvarchar(24)")
+                        .HasColumnType("varchar(24)")
                         .HasComment("密码");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)")
+                        .HasColumnType("varchar(11)")
                         .HasComment("手机号");
 
                     b.Property<string>("Photo")
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
+                        .HasColumnType("varchar(500)")
                         .HasComment("照片");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(24)
-                        .HasColumnType("nvarchar(24)")
+                        .HasColumnType("varchar(24)")
                         .HasComment("用户昵称");
 
                     b.HasKey("ID");
@@ -131,8 +126,7 @@ namespace Repository.EF.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("ID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(8,2)")
@@ -145,25 +139,25 @@ namespace Repository.EF.Migrations
                     b.Property<string>("ConsumeName")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
+                        .HasColumnType("varchar(500)")
                         .HasComment("消费名称");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasComment("创建时间");
 
                     b.Property<DateTime>("LogTime")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasComment("消费时间");
 
                     b.Property<string>("Place")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("varchar(100)")
                         .HasComment("消费地点");
 
                     b.Property<string>("Remark")
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
+                        .HasColumnType("varchar(500)")
                         .HasComment("备注");
 
                     b.Property<int?>("UserID")

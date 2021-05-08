@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Repository.Entity.Models.Base;
 using Repository.Factory;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Business.Service.Base
 {
@@ -11,11 +14,10 @@ namespace Business.Service.Base
         public UserService(IRepositoryFactory repositoryFactory, DbContext mydbcontext) : base(repositoryFactory, mydbcontext)
         {
         }
-        public void aaa()
+     
+        public List<UserEntity> GetList(Expression<Func<UserEntity, bool>> expression)
         {
-           var int1= this.Repository.Count();
-            var int2 =this.CreateService<DepartmentEntity>().Count();
-            var int3 = this.Repository.Where(a => !string.IsNullOrWhiteSpace(a.UserName)).ToListAsync();
+            return this.Repository.Where(expression).ToList();
         }
     }
 }

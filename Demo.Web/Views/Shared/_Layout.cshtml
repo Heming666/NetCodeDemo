@@ -22,9 +22,10 @@
             <div class="span2" id="sidebar">
                 @{ await Html.RenderPartialAsync("_MenuLayout");}
             </div>
-
-            <!--/span-->
-            @RenderBody()
+            <div class="span10" id="content">
+                <!--/span-->
+                @RenderBody()
+            </div>
         </div>
         <hr>
         @{ await Html.RenderPartialAsync("_FooterLayout");}
@@ -34,9 +35,10 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/moban/vendors/easypiechart/jquery.easy-pie-chart.js"></script>
     <script src="~/moban/assets/scripts.js"></script>
-    <script>$(function() {
+    <script>
+    $(function () {
             // Easy pie charts
-            $('.chart').easyPieChart({animate: 1000});
+            $('.chart').easyPieChart({ animate: 1000 });
         });</script>
 </body>
 

@@ -1,43 +1,55 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Repository.EF.Migrations
 {
-    public partial class mssql : Migration
+    public partial class mysql : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8");
+
             migrationBuilder.CreateTable(
                 name: "Base_Department",
                 columns: table => new
                 {
                     DeptId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DeptName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    DeptCode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifyDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    DeptName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8"),
+                    DeptCode = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ModifyDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Base_Department", x => x.DeptId);
                 },
-                comment: "部门表");
+                comment: "部门表")
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "Base_UserInfo",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false, comment: "主键")
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Account = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: false, comment: "账户"),
-                    PassWord = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: false, comment: "密码"),
-                    UserName = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: false, comment: "用户昵称"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Account = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: false, comment: "账户")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    PassWord = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: false, comment: "密码")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    UserName = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: false, comment: "用户昵称")
+                        .Annotation("MySql:CharSet", "utf8"),
                     Gender = table.Column<int>(type: "int", nullable: true, comment: "性别"),
-                    Photo = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true, comment: "照片"),
-                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: true, comment: "手机号"),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifyDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Photo = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true, comment: "照片")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Phone = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: true, comment: "手机号")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ModifyDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DeptInfoID = table.Column<int>(type: "int", nullable: true),
                     DepartmentEntityID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -57,21 +69,25 @@ namespace Repository.EF.Migrations
                         principalColumn: "DeptId",
                         onDelete: ReferentialAction.Restrict);
                 },
-                comment: "用户信息表");
+                comment: "用户信息表")
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "User_ConsumeEntity",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ConsumeName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false, comment: "消费名称"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ConsumeName = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false, comment: "消费名称")
+                        .Annotation("MySql:CharSet", "utf8"),
                     Amount = table.Column<decimal>(type: "decimal(8,2)", nullable: false, comment: "金额"),
-                    Place = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true, comment: "消费地点"),
-                    Remark = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true, comment: "备注"),
+                    Place = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true, comment: "消费地点")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Remark = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true, comment: "备注")
+                        .Annotation("MySql:CharSet", "utf8"),
                     Classify = table.Column<int>(type: "int", nullable: false, comment: "分类"),
-                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "创建时间"),
-                    LogTime = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "消费时间"),
+                    CreateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false, comment: "创建时间"),
+                    LogTime = table.Column<DateTime>(type: "datetime(6)", nullable: false, comment: "消费时间"),
                     UserID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -84,7 +100,8 @@ namespace Repository.EF.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 },
-                comment: "消费支出明细表");
+                comment: "消费支出明细表")
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateIndex(
                 name: "Index_ID",

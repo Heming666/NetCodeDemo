@@ -11,6 +11,7 @@ using Util.Log;
 
 namespace Demo.Web.Areas.Base.Controllers
 {
+    [Area("Base")]
     public class DeptController : Controller
     {
         public ILoggerFactory _log { get; }
@@ -25,6 +26,7 @@ namespace Demo.Web.Areas.Base.Controllers
         public ActionResult Index()
         {
             List<DepartmentEntity> depts = _deptService.GetList(ExpressionExtension.True<DepartmentEntity>());
+            
             return View(depts);
         }
 
@@ -43,10 +45,11 @@ namespace Demo.Web.Areas.Base.Controllers
         // POST: DeptController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(DepartmentEntity entity)
         {
             try
             {
+                
                 return RedirectToAction(nameof(Index));
             }
             catch

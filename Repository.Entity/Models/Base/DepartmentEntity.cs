@@ -17,16 +17,18 @@ namespace Repository.Entity.Models.Base
         [Column("DeptId", TypeName = "int")]
         public int ID { get; set; }
 
-        [Required(ErrorMessage = "部门名称不能为空"),MaxLength(50)]
+        
+        [Required(ErrorMessage = "部门名称不能为空"),MaxLength(50),Display(Name ="部门名称")]
         public string DeptName { get; set; }
 
-        [MaxLength(50)]
+        [MaxLength(50), Display(Name = "部门编码")]
         public string DeptCode { get; set; }
 
+        [ Display(Name = "创建时间")]
         public DateTime  CreateDate { get; set; }
-
+        [Display(Name = "修改时间")]
         public DateTime ModifyDate { get; set; }
-
+    
         public List<UserEntity> Users { get; set; }
     }
 }

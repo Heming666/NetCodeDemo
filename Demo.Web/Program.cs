@@ -20,7 +20,7 @@ namespace Demo.Web
             //在运行时应用迁移
             using (var scope = host.Services.CreateScope())
             {
-                var db = scope.ServiceProvider.GetRequiredService<MSSQLDBContext>();
+                var db = scope.ServiceProvider.GetRequiredService<MySqlDBContext>();
                 db.Database.Migrate();
             }
             host.Run();

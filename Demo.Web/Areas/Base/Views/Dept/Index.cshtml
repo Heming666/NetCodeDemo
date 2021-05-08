@@ -4,51 +4,65 @@
     ViewData["Title"] = "部门表";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="row-fluid section">
+    <!-- block -->
+    <div class="block">
+   
+        <div class="navbar navbar-inner block-header">
+            <div class="muted pull-left">Form Wizard</div>
+            <div class="muted pull-right"><a asp-action="Create">新增</a></div>
+        </div>
+        <div class="block-content collapse in">
+            <div class="span12">
+                <div id="rootwizard">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DeptName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DeptCode)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CreateDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ModifyDate)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DeptName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DeptCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreateDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ModifyDate)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                                        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /block -->
+</div>
 
-<h1>View</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DeptName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeptCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifyDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeptName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeptCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifyDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>

@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace Business.Service.Base
 {
-    public class DepartmentService : BaseService<UserEntity>, IDepartmentService
+    public class DepartmentService : BaseService<DepartmentEntity>, IDepartmentService
     {
         public DepartmentService(IRepositoryFactory repositoryFactory, DbContext mydbcontext) : base(repositoryFactory, mydbcontext)
         {
         }
 
-        public List<DepartmentEntity> GetList(Expression<Func<DepartmentEntity, bool>> Exception)
+        public List<DepartmentEntity> GetList(Expression<Func<DepartmentEntity, bool>> expression)
         {
-            return new List<DepartmentEntity>();
+            return this.Repository.Where(expression).ToList();
         }
     }
 }

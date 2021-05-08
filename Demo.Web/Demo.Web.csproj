@@ -53,8 +53,4 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Base\Views\User\" />
-  </ItemGroup>
-
 </Project>

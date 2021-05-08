@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Util.Log;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace Demo.Web
 {
@@ -56,18 +57,17 @@ namespace Demo.Web
             {
                 return new NLogService("XmlConfig/NLog.config");
             });
-            services.AddScoped<DbContext, MSSQLDBContext>();
-            //services.AddScoped<DbContext, MySqlDBContext>();
-            ////注入mysqlDbcontext
-            //services.AddDbContext<MySqlDBContext>(option =>
-            //{
-            //    option.UseMySql(
-            //        Configuration.GetConnectionString("mysql"),
-            //        ServerVersion.AutoDetect(Configuration.GetConnectionString("mysql")),
-            //        option =>
-            //        {
-            //        });
-            //});
+            services.AddScoped<DbContext, MySqlDBContext>();
+            //注入mysqlDbcontext
+            services.AddDbContext<MySqlDBContext>(option =>
+            {
+                option.UseMySql(
+                    Configuration.GetConnectionString("mysql"),
+                    ServerVersion.AutoDetect(Configuration.GetConnectionString("mysql")),
+                    option =>
+                    {
+                    });
+            });
             ////注入oracleDbcontext
             //services.AddDbContext<OracleDBContext>(option =>
             //{
@@ -78,18 +78,18 @@ namespace Demo.Web
             //            //数据设置
             //        });
             //});
-            services.AddDbContext<MSSQLDBContext>(option =>
-            {
-                option.UseSqlServer(
-                    Configuration.GetConnectionString("mssql"),
-                    option =>
-                    {
-                        
-                        //数据设置
-                    });
-            });
+            //services.AddDbContext<MSSQLDBContext>(option =>
+            //{
+            //    option.UseSqlServer(
+            //        Configuration.GetConnectionString("mssql"),
+            //        option =>
+            //        {
+
+            //        });
+            //});
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IDepartmentService, DepartmentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,27 +99,41 @@ namespace Demo.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseHttpsRedirection();//HTTPS跳转
-            app.UseStaticFiles();//静态文件
+     
             app.UseCookiePolicy();
-            app.UseRouting();
             app.UseRequestLocalization();
             app.UseCors();
             app.UseAuthentication();
-            app.UseAuthorization();
             app.UseSession();
             app.UseResponseCompression();//响应压缩， 必须注册中间件services.AddResponseCompression();
             app.UseResponseCaching();
-            app.UseExceptionHandler(option => option.Run(async context => {
-                await Task.Run(() => loggerFactory.Error( context.Features.Get<IExceptionHandlerFeature>().Error,"全局错误")
-                );
-            })
-            );
+
+            app.UseRouting();
+            app.UseHttpsRedirection();//HTTPS跳转
+            app.UseStaticFiles();//静态文件
+            app.UseAuthorization();
+            //app.UseExceptionHandler(option => option.Run(async context =>
+            //{
+            //    await Task.Run(() =>
+            //    {
+            //        Exception ex = context.Features.Get<IExceptionHandlerFeature>().Error;
+            //        loggerFactory.Error(ex, "全局错误");
+            //        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            //        context.Response.ContentType = "application/json";
+            //        if (ex != null)
+            //        {
+            //            var errObj = JsonConvert.SerializeObject(ex);
+            //            context.Response.WriteAsync(errObj);
+            //        }
+            //    });
+            //})
+            //);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                                                                       name: "MyArea",
-                                                                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                        name: "areas",
+                        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                        );
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }
