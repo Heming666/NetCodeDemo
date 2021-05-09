@@ -39,7 +39,7 @@ namespace Demo.Web.Areas.Customer.Controllers
         // GET: ComsumeController/Create
         public ActionResult Create(int UserId)
         {
-            return View(new ConsumeEntity() { UserId = UserId });
+            return View(new ConsumeEntity() { UserId = UserId,LogTime=DateTime.Now,CreateTime=DateTime.Now });
         }
 
         // POST: ComsumeController/Create
