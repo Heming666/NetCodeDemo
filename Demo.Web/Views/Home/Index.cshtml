@@ -1,4 +1,222 @@
-﻿<div class="span10" id="content">
+﻿@section scripts
+{
+    <script src="~/lib/highcharts/highcharts.js"></script>
+}
+@section styles
+{
+    <link href="~/lib/highcharts/css/highcharts.min.css" rel="stylesheet" />
+}
+<script>
+    $(function () {
+        LoadPie();
+        LoadLine();
+        loadColumn();
+        loadline2();
+    })
+    var LoadPie = () => {
+        Highcharts.chart('pie', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: '本月各项消费占比'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: 'Brands',
+                colorByPoint: true,
+                data: [{
+                    name: '饮食',
+                    y: 61.41,
+                    sliced: true,
+                    selected: true
+                }, {
+                    name: '日用',
+                    y: 11.84
+                }, {
+                    name: '出行',
+                    y: 10.85
+                }, {
+                    name: '医疗',
+                    y: 4.67
+                }, {
+                    name: '穿搭',
+                    y: 4.18
+                }, {
+                    name: 'Sogou Explorer',
+                    y: 1.64
+                }, {
+                    name: 'Opera',
+                    y: 1.6
+                }, {
+                    name: 'QQ',
+                    y: 1.2
+                }, {
+                    name: 'Other',
+                    y: 2.61
+                }]
+            }]
+        });
+    }
+
+    var LoadLine = () => {
+        Highcharts.chart('line', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '本年度详细消费情况'
+            },
+            subtitle: {
+                text: '数据来源: WorldClimate.com'
+            },
+            xAxis: {
+                categories: [
+                    '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'
+                ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '降雨量 (mm)'
+                }
+            },
+            tooltip: {
+                // head + 每个 point + footer 拼接成完整的 table
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '东京',
+                data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+            }, {
+                name: '纽约',
+                data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+            }, {
+                name: '伦敦',
+                data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
+            }, {
+                name: '柏林',
+                data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+            }]
+        });
+    }
+
+    var loadColumn=() => {
+        var chart = Highcharts.chart('column', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '按性别划分的水果消费总量'
+            },
+            xAxis: {
+                categories: ['1月', '2', '3', '4', '5']
+            },
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '水果数量'
+                }
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                        this.series.name + ': ' + this.y + '<br/>' +
+                        '总量: ' + this.point.stackTotal;
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal'
+                }
+            },
+            series: [{
+                name: '小张',
+                data: [5, 3, 4, 7, 2],
+            }, {
+                name: '小潘',
+                data: [3, 4, 4, 2, 5],
+            }, {
+                name: '小彭',
+                data: [2, 5, 6, 2, 1],
+            }, {
+                name: '小王',
+                data: [3, 0, 4, 4, 3],
+            }]
+        });
+    }
+
+    var loadline2 = () => {
+        var chart = Highcharts.chart('line2', {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: '月平均气温'
+            },
+            subtitle: {
+                text: '数据来源: WorldClimate.com'
+            },
+            xAxis: {
+                categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+            },
+            yAxis: {
+                title: {
+                    text: '气温 (°C)'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        // 开启数据标签
+                        enabled: true
+                    },
+                    // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                    enableMouseTracking: false
+                }
+            },
+            series: [{
+                name: '东京',
+                data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+            }, {
+                name: '伦敦',
+                data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+            }]
+        });
+
+    }
+</script>
+<div class="span10" id="content">
     <div class="row-fluid">
         <div class="alert alert-success">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -32,33 +250,17 @@
                 </div>
             </div>
             <div class="block-content collapse in">
-                <div class="span3">
-                    <div class="chart" data-percent="73">73%</div>
-                    <div class="chart-bottom-heading">
-                        <span class="label label-info">访问量</span>
-
-                    </div>
+                <div class="span12">
+                    <div id="pie"></div>
                 </div>
-                <div class="span3">
-                    <div class="chart" data-percent="53">53%</div>
-                    <div class="chart-bottom-heading">
-                        <span class="label label-info">浏览量</span>
-
-                    </div>
+                <div class="span12">
+                    <div id="line"></div>
                 </div>
-                <div class="span3">
-                    <div class="chart" data-percent="83">83%</div>
-                    <div class="chart-bottom-heading">
-                        <span class="label label-info">用户</span>
-
-                    </div>
+                <div class="span12">
+                    <div id="column"></div>
                 </div>
-                <div class="span3">
-                    <div class="chart" data-percent="13">13%</div>
-                    <div class="chart-bottom-heading">
-                        <span class="label label-info">订单</span>
-
-                    </div>
+                <div class="span12">
+                    <div id="line2"></div>
                 </div>
             </div>
         </div>

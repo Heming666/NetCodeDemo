@@ -11,6 +11,15 @@
       "provider": "unpkg",
       "library": "jquery@3.6.0",
       "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "highcharts@9.0.1",
+      "destination": "wwwroot/lib/highcharts/",
+      "files": [
+        "highcharts.js",
+        "css/highcharts.min.css",
+        "highcharts.min.js"
+      ]
     }
   ]
 }
