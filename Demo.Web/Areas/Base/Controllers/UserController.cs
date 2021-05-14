@@ -17,16 +17,45 @@ namespace Demo.Web.Areas.Base.Controllers
     {
         private readonly ILoggerFactory _logFactory;
         private readonly IUserService _userService;
-        public UserController(ILoggerFactory factory, IUserService userService)
+        private readonly IDepartmentService _deptService;
+        public UserController(ILoggerFactory factory,
+                              IUserService userService,
+                              IDepartmentService departmentService)
         {
             this._logFactory = factory;
             this._userService = userService;
+            this._deptService = departmentService;
         }
         //[Authorize(Roles = "admin")]
         public IActionResult Index()
         {
-            List<UserEntity> depts = _userService.GetList(ExpressionExtension.True<UserEntity>());
+            List<UserEntity> users = _userService.GetList(ExpressionExtension.True<UserEntity>());
+            return View(users);
+        }
+        // GET: DeptController/Create
+        public ActionResult Create()
+        {
+            List<DepartmentEntity> depts = _deptService.GetList(ExpressionExtension.True<DepartmentEntity>());
+            ViewBag.Depts = depts;
             return View();
         }
+
+        // POST: DeptController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(UserEntity entity)
+        {
+            try
+            {
+                _userService.Insert(entity);
+                return RedirectToAction(nameof(Index));
+            }
+            catch( Exception ex)
+            {
+                _logFactory.Error(ex);
+                return View();
+            }
+        }
+
     }
 }

@@ -70,7 +70,8 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>|
+                <a asp-action="Index" asp-controller="Comsume" asp-area="Customer" asp-route-UserId="@item.ID">消费</a>
             </td>
         </tr>
 }

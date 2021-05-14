@@ -19,5 +19,10 @@ namespace Business.Service.Base
         {
             return this.Repository.Where(expression).ToList();
         }
+
+        public void Insert(UserEntity entity)
+        {
+            this.Repository.Add(entity);
+        }
     }
 }

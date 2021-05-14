@@ -59,6 +59,8 @@ namespace Repository.Entity.Models.Base
 
         public DateTime  ModifyDate { get; set; }
 
+        [ForeignKey("DeptId")]
+        public int DeptId { get; set; }
         public DepartmentEntity DeptInfo { get; set; }
 
         public List<ConsumeEntity> ConsumeEntitys { get; set; }

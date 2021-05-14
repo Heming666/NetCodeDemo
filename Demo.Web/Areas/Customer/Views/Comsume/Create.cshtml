@@ -1,0 +1,60 @@
+﻿@model Repository.Entity.Models.Consume.ConsumeEntity
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>ConsumeEntity</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ConsumeName" class="control-label"></label>
+                <input asp-for="ConsumeName" class="form-control" />
+                <span asp-validation-for="ConsumeName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Place" class="control-label"></label>
+                <input asp-for="Place" class="form-control" />
+                <span asp-validation-for="Place" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Remark" class="control-label"></label>
+                <input asp-for="Remark" class="form-control" />
+                <span asp-validation-for="Remark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Classify" class="control-label"></label>  
+                <select asp-for="Classify" data-val-required="The Email field is required." asp-items="Html.GetEnumSelectList<Repository.Entity.Models.Consume.Classify>()"> </select>
+                <span asp-validation-for="Classify" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="LogTime" class="control-label"></label>
+                <input asp-for="LogTime" class="form-control" />
+                <span asp-validation-for="LogTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+
+                <input name="CreateTime" id="CreateTime" type="hidden" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:dd")"/>
+                <input type="hidden" id="UserId" name="UserId" value="@Model.UserId" />
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" asp-route-UserId="@Model.UserId">Back to List</a>
+</div>
+

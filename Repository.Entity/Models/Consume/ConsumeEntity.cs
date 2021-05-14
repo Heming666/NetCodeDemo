@@ -36,6 +36,9 @@ namespace Repository.Entity.Models.Consume
         public DateTime CreateTime { get; set; }
         [Comment("消费时间")]
         public DateTime LogTime { get; set; }
+
+        [ForeignKey("UserId")]
+        public int UserId { get; set; }
         public UserEntity User { get; set; }
     }
 
