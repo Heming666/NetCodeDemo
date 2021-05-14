@@ -17,26 +17,32 @@ namespace Repository.Entity.Models.Consume
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("ID", TypeName = "int")]
         public int ID { get; set; }
-
+        [Display(Name = "消费名称")]
         [Comment("消费名称"), Required(ErrorMessage = "消费明细不能为空"), MaxLength(500)]
         public string ConsumeName { get; set; }
         /// <summary>
         /// 金额
         /// </summary>
+        [Display(Name = "金额")]
         [Comment("金额"), Required(ErrorMessage = "消费名称不能为空")]
         public decimal Amount { get; set; }
 
+        [Display(Name = "消费地点")]
         [Comment("消费地点"),MaxLength(100)]
         public string Place { get; set; }
 
+        [Display(Name = "备注")]
         [Comment("备注"),MaxLength(500)]
         public string Remark { get; set; }
 
+        [Display(Name = "分类")]
         [Comment("分类")]
         public Classify Classify { get; set; }
 
+        [Display(Name = "创建时间")]
         [Comment("创建时间")]
         public DateTime CreateTime { get; set; }
+        [Display(Name = "消费时间")]
         [Comment("消费时间")]
         public DateTime LogTime { get; set; }
 

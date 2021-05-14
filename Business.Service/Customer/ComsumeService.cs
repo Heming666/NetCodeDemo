@@ -25,7 +25,7 @@ namespace Business.Service.Customer
 
         public List<ConsumeEntity> GetList(Expression<Func<ConsumeEntity, bool>> expression)
         {
-            return this.Repository.Where(expression).ToList();
+            return this.Repository.Where(expression).OrderBy(x=>x.LogTime).ToList();
         }
 
         public async Task<List<ChartsColumnModel>> LoadColumn(Expression<Func<ConsumeEntity, bool>> expression)

@@ -1,4 +1,15 @@
-﻿
+﻿@{
+    var action = Context.Request.RouteValues["action"].ToString().ToLower() ;
+    var controller = Context.Request.RouteValues["controller"].ToString().ToLower();
+    var area = Context.Request.RouteValues["area"]?.ToString().ToLower();
+}
+<script>
+    $(function () {
+        $("#heandMenu li").click(function () {
+            $(this).addClass("active").siblings().removeClass("active");
+        })
+    })
+</script>
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container-fluid">
@@ -11,7 +22,7 @@
             <div class="nav-collapse collapse">
                 <ul class="nav pull-right">
                     <li class="dropdown">
-                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                        <a asp-action="index" asp-controller="Home" role="button" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="icon-user"></i>管理员<i class="caret"></i>
 
                         </a>
@@ -26,8 +37,8 @@
                         </ul>
                     </li>
                 </ul>
-                <ul class="nav">
-                    <li class="active">
+                <ul class="nav" id="heandMenu">
+                    <li class="@Html.Raw(controller=="home" ? "active" :"")">
                         <a href="#">首页</a>
                     </li>
                     <li class="dropdown">
@@ -92,7 +103,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <li class="dropdown @Html.Raw(area=="base" || area=="customer" ? "active" : "")" >
                         <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
                             用户 <i class="caret"></i>
 
@@ -102,7 +113,7 @@
                                 <a tabindex="-1" asp-area="Base" asp-controller="User" asp-action="Index">用户列表</a>
                             </li>
                             <li>
-                                <a tabindex="-1"  asp-area="Base" asp-controller="Dept" asp-action="Index">部门</a>
+                                <a tabindex="-1" asp-area="Base" asp-controller="Dept" asp-action="Index">部门</a>
                             </li>
                             <li>
                                 <a tabindex="-1" href="#">权限</a>

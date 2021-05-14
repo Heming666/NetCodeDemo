@@ -22,12 +22,34 @@ namespace Demo.Web.Areas.Customer.Controllers
             this._logger = logger;
             this._comsumeService = comsumeService;
         }
-        // GET: ComsumeController
-        public ActionResult Index(int UserId)
+     /// <summary>
+     /// 消费首页
+     /// </summary>
+     /// <param name="classify"></param>
+     /// <param name="UserId"></param>
+     /// <returns></returns>
+        public ActionResult Index(int? classify=null, int UserId=1)
         {
-            List<ConsumeEntity> datas = _comsumeService.GetList(p=>p.UserId ==UserId);
+            var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == UserId);
+            if (classify.HasValue) where = where.And(x => x.Classify == (Classify)classify.Value);
+            List<ConsumeEntity> datas = _comsumeService.GetList(where);
             ViewBag.UserId = UserId;
             return View(datas);
+        }
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <param name="classify"></param>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [Route("Index"),HttpPost,ValidateAntiForgeryToken]
+        public ActionResult IndexPost(int? classify = null, int UserId = 1)
+        {
+            var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == UserId);
+            if (classify.HasValue) where = where.And(x => x.Classify == (Classify)classify.Value);
+            List<ConsumeEntity> datas = _comsumeService.GetList(where);
+            ViewBag.UserId = UserId;
+            return View(nameof(Index),datas);
         }
 
         // GET: ComsumeController/Details/5
