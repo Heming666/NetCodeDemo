@@ -147,7 +147,12 @@ namespace Repository.Factory
         /// <param name="where">过滤条件</param>
         /// <returns></returns>
         IQueryable<T> Where(Expression<Func<T, bool>> @where);
-
+        /// <summary>
+        /// 条件查询
+        /// </summary>
+        /// <param name="where">过滤条件</param>
+        /// <returns></returns>
+        IQueryable<T> Where();
         /// <summary>
         /// 条件查询 - 支持排序
         /// </summary>

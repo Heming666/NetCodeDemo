@@ -18,11 +18,11 @@ namespace Demo.Web
         {
             var host = CreateHostBuilder(args).Build();
             //在运行时应用迁移
-            using (var scope = host.Services.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<MySqlDBContext>();
-                db.Database.Migrate();
-            }
+            //using (var scope = host.Services.CreateScope())
+            //{
+            //    var db = scope.ServiceProvider.GetRequiredService<MySqlDBContext>();
+            //    db.Database.Migrate();
+            //}
             host.Run();
         }
 

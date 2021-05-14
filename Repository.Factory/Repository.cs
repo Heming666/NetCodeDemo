@@ -198,6 +198,10 @@ namespace Repository.Factory
         {
             return this._dbSet.Where(@where);
         }
+        public IQueryable<T> Where()
+        {
+            return this._dbSet.AsQueryable();
+        }
 
         public IQueryable<T> Where<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, bool isDesc = false)
         {

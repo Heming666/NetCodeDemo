@@ -20,6 +20,9 @@ namespace Repository.Entity.Models.Consume
 
         [Comment("消费名称"), Required(ErrorMessage = "消费明细不能为空"), MaxLength(500)]
         public string ConsumeName { get; set; }
+        /// <summary>
+        /// 金额
+        /// </summary>
         [Comment("金额"), Required(ErrorMessage = "消费名称不能为空")]
         public decimal Amount { get; set; }
 
