@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Entity.Models.Consume;
+using Repository.Entity.ViewModels.Index;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,12 @@ namespace Demo.Web.Areas.Customer.Controllers
     public class ComsumeController : Controller
     {
         private readonly ILoggerFactory _logger;
-        private readonly IComsumeService _comsumeService;
+        private readonly IComsumeService _customer;
 
         public ComsumeController(ILoggerFactory logger,IComsumeService comsumeService)
         {
             this._logger = logger;
-            this._comsumeService = comsumeService;
+            this._customer = comsumeService;
         }
      /// <summary>
      /// 消费首页
@@ -32,7 +33,7 @@ namespace Demo.Web.Areas.Customer.Controllers
         {
             var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == UserId);
             if (classify.HasValue) where = where.And(x => x.Classify == (Classify)classify.Value);
-            List<ConsumeEntity> datas = _comsumeService.GetList(where);
+            List<ConsumeEntity> datas = _customer.GetList(where);
             ViewBag.UserId = UserId;
             return View(datas);
         }
@@ -47,7 +48,7 @@ namespace Demo.Web.Areas.Customer.Controllers
         {
             var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == UserId);
             if (classify.HasValue) where = where.And(x => x.Classify == (Classify)classify.Value);
-            List<ConsumeEntity> datas = _comsumeService.GetList(where);
+            List<ConsumeEntity> datas = _customer.GetList(where);
             ViewBag.UserId = UserId;
             return View(nameof(Index),datas);
         }
@@ -71,7 +72,7 @@ namespace Demo.Web.Areas.Customer.Controllers
         {
             try
             {
-                _comsumeService.Add(entity);
+                _customer.Add(entity);
                 return RedirectToAction(nameof(Index), new { UserId = entity.UserId });
             }
             catch(Exception ex)
@@ -122,5 +123,43 @@ namespace Demo.Web.Areas.Customer.Controllers
                 return View();
             }
         }
+
+        #region 统计
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoadPie(int month)
+        {
+            List<ChartsPieModel> data = await _customer.LoadPie(x => x.LogTime.Month == month && x.UserId.Equals(1));
+            return Json(data);
+        }
+        [HttpPost]
+        public async Task<IActionResult> LoadYearPie()
+        {
+            int year = DateTime.Now.Year;
+            List<ChartsPieModel> data = await _customer.LoadPie(x => x.LogTime.Year == year && x.UserId.Equals(1));
+            return Json(data);
+        }
+        [HttpPost]
+        public async Task<IActionResult> LoadColumn(int year)
+        {
+            List<ChartsColumnModel> data = await _customer.LoadColumn(x => x.LogTime.Year == year && x.UserId.Equals(1));
+            return Json(data);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LoadMonthColumn(int month)
+        {
+            List<ChartsColumnModel> data = await _customer.LoadMonthColumn(x => x.LogTime.Month == month && x.UserId.Equals(1));
+            List<int> days = new List<int>();
+            int day = System.Threading.Thread.CurrentThread.CurrentUICulture.Calendar.GetDaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            while (day >=1)
+            {
+                days.Add(day);
+                day--;
+            }
+            var res = new { days = days.OrderBy(x=>x),  data };
+            return Json(res);
+        }
+        #endregion
     }
 }

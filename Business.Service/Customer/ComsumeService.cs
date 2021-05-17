@@ -25,7 +25,7 @@ namespace Business.Service.Customer
 
         public List<ConsumeEntity> GetList(Expression<Func<ConsumeEntity, bool>> expression)
         {
-            return this.Repository.Where(expression).OrderBy(x=>x.LogTime).ToList();
+            return this.Repository.Where(expression).OrderBy(x => x.LogTime).ToList();
         }
 
         public async Task<List<ChartsColumnModel>> LoadColumn(Expression<Func<ConsumeEntity, bool>> expression)
@@ -61,7 +61,44 @@ namespace Business.Service.Customer
                     chartsColumn.data.Add(0);
                 month++;
             }
-            charts.Add(chartsColumn);
+            charts.Insert(0,chartsColumn);
+            return charts;
+        }
+
+        /// <summary>
+        /// 月消费趋势
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        public async Task<List<ChartsColumnModel>> LoadMonthColumn(Expression<Func<ConsumeEntity, bool>> expression)
+        {
+            DateTime now = DateTime.Now;
+            var data = await this.Repository.Where(expression).GroupBy(x => new { x.Classify, Day = x.LogTime.Day }, (x, y) => new { Total = y.Sum(p => p.Amount), Classify = x.Classify, x.Day }).Select(x => x).ToListAsync();
+            var classifyGroup = data.GroupBy(x => x.Classify).Select(x =>  x.Key ).ToList();
+            List<ChartsColumnModel> charts = new();
+            charts.Add(new ChartsColumnModel("总消费"));
+            classifyGroup.ForEach(x =>
+            {
+                ChartsColumnModel classifyColumn = new ChartsColumnModel(Enum.GetName(x));
+                charts.Add(classifyColumn);
+            });
+         
+            int count = 1;
+            int day = System.Threading.Thread.CurrentThread.CurrentUICulture.Calendar.GetDaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            while (count <= day)
+            {
+            
+                 var dayAmount =   data.Where(x => x.Day == count).ToList();
+
+                charts.FirstOrDefault(x=>x.name=="总消费").data.Add(dayAmount.Sum(x => x.Total));
+                classifyGroup.ForEach(x =>
+                {
+                    var classifyInfo = data.FirstOrDefault(p => p.Day == count && p.Classify == x)?.Total ?? 0;
+                    charts.FirstOrDefault(p=>p.name== Enum.GetName(x)).data.Add(classifyInfo);
+                });
+              
+                count++;
+            }
             return charts;
         }
 

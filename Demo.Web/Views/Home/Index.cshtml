@@ -1,4 +1,14 @@
-﻿@section scripts
+﻿@{
+    int month = 1;
+    string htmlStr = string.Empty;
+    while (month <= 12)
+    {
+        string selectStr = month == DateTime.Now.Month ? "selected=\"selected\"" : "";
+        htmlStr += $"<option value=\"{ month}\" {selectStr} >{month} 月</option>";
+        month++;
+    }
+}
+@section scripts
 {
     <script src="~/lib/highcharts/highcharts.js"></script>
 }
@@ -6,16 +16,18 @@
 {
     <link href="~/lib/highcharts/css/highcharts.min.css" rel="stylesheet" />
 }
+
 <script>
     $(function () {
         LoadPie();
         LoadYearPie();
         loadColumn();
+        LoadMonthColumn();
     })
     var LoadPie = () => {
         var month = $("#month").val();
         $.ajax({
-            url: "@Url.Action("LoadPie")",
+            url: "@Url.Action("LoadPie","Comsume",new { area="Customer"})",
             data: { month: month },
             type: "POST",
             success: (data) => {
@@ -67,7 +79,7 @@
     }
     var LoadYearPie = () => {
         $.ajax({
-            url:"@Url.Action("LoadYearPie")",
+            url:"@Url.Action("LoadYearPie", "Comsume", new { area = "Customer" })",
             type: "POST",
             success: (data) => {
 
@@ -113,7 +125,7 @@
     var loadColumn = () => {
         var year = $("#columnYear").val()
           $.ajax({
-            url: "@Url.Action("LoadColumn")",
+            url: "@Url.Action("LoadColumn", "Comsume", new { area = "Customer" })",
               data: { year: year },
             type: "POST",
             success: (data) => {
@@ -161,7 +173,7 @@
                         type: 'line'
                     },
                     title: {
-                        text: '消费趋势'
+                        text: '年度消费趋势'
                     },
                     subtitle: {
                         text: '各类支出情况'
@@ -192,6 +204,51 @@
             }
         })
 
+    }
+
+    var LoadMonthColumn = () => {
+        var month = $("#columnMonth").val()
+          $.ajax({
+              url: "@Url.Action("LoadMonthColumn", "Comsume", new { area = "Customer" })",
+              data: { month: month },
+            type: "POST",
+            success: (data) => {
+
+                var chart = Highcharts.chart('monthLine', {
+                    chart: {
+                        type: 'line'
+                    },
+                    title: {
+                        text: '月度消费趋势'
+                    },
+                    subtitle: {
+                        text: '各类支出情况'
+                    },
+                    xAxis: {
+                        categories: data.days
+                    },
+                    yAxis: {
+                        title: {
+                            text: '金额 (￥)'
+                        }
+                    },
+                    plotOptions: {
+                        line: {
+                            dataLabels: {
+                                // 开启数据标签
+                                enabled: true
+                            },
+                            // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                            enableMouseTracking: true
+                        }
+                    },
+                    series: data.data
+                });
+            },
+            error: (error) => {
+                console.error(error);
+            }
+        })
     }
 </script>
 <div class="row-fluid">
@@ -228,12 +285,7 @@
         <div class="block-content collapse in">
             <div class="row-fluid">
                 <select class="form-control-sm pull-right" id="month" onchange="LoadPie()">
-                    @{ int month = 1;}
-                    @while (month <= 12)
-                    {
-                        string selectStr = month == DateTime.Now.Month ? "selected=\"selected\"" : "";
-                        @Html.Raw($"<option value=\"{ month}\" {selectStr} >{month} 月</option>")month++;
-                    }
+                    @Html.Raw(htmlStr)
                 </select>
             </div>
 
@@ -268,8 +320,20 @@
                     <div id="line"></div>
                 </div>
             </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <select class="form-control-sm pull-right" id="columnMonth" onchange="LoadMonthColumn()">
+                        @Html.Raw(htmlStr)
+                    </select>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <div id="monthLine"></div>
+                </div>
+            </div>
         </div>
-        </div>
+    </div>
     <!-- /block -->
 </div>
 <div class="row-fluid">

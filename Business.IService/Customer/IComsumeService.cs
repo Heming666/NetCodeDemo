@@ -14,6 +14,7 @@ namespace Business.IService.Customer
         List<ConsumeEntity> GetList(Expression<Func<ConsumeEntity, bool>> expression);
         void Add(ConsumeEntity entity);
         Task<List<ChartsPieModel>> LoadPie(Expression<Func<ConsumeEntity,bool>> expression);
-        Task<List<ChartsColumnModel>> LoadColumn(Expression<Func<ConsumeEntity, bool>> p);
+        Task<List<ChartsColumnModel>> LoadColumn(Expression<Func<ConsumeEntity, bool>> expression);
+        Task<List<ChartsColumnModel>> LoadMonthColumn(Expression<Func<ConsumeEntity, bool>> expression);
     }
 }
