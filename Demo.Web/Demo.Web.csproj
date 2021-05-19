@@ -9,13 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\lib\新文件夹\**" />
     <Compile Remove="wwwroot\新文件夹\**" />
-    <Content Remove="wwwroot\lib\新文件夹\**" />
     <Content Remove="wwwroot\新文件夹\**" />
-    <EmbeddedResource Remove="wwwroot\lib\新文件夹\**" />
     <EmbeddedResource Remove="wwwroot\新文件夹\**" />
-    <None Remove="wwwroot\lib\新文件夹\**" />
     <None Remove="wwwroot\新文件夹\**" />
   </ItemGroup>
 
@@ -56,6 +52,7 @@
   <ItemGroup>
     <Folder Include="Areas\Customer\Data\" />
     <Folder Include="Areas\Customer\Models\" />
+    <Folder Include="wwwroot\lib\bootstrap\" />
   </ItemGroup>
 
 </Project>

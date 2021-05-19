@@ -23,9 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository.Entity", "Reposi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{BC939768-69EA-4885-BB29-276994D54B19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business.IService", "Business.IService\Business.IService.csproj", "{F91EF1AE-68F0-4A59-99F7-AAD1B4B5DB51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.IService", "Business.IService\Business.IService.csproj", "{F91EF1AE-68F0-4A59-99F7-AAD1B4B5DB51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business.Service", "Business.Service\Business.Service.csproj", "{6ED13B57-6BE3-44A2-8BC4-3F8BBDF87684}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.Service", "Business.Service\Business.Service.csproj", "{6ED13B57-6BE3-44A2-8BC4-3F8BBDF87684}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
