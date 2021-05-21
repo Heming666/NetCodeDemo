@@ -3,62 +3,83 @@
 @{
     Layout = "~/Views/Shared/_EmptyLayout.cshtml";
     List<DepartmentEntity> depts = ViewBag.Depts;
-    
-}
-@section scripts{
 
 }
+
+
+    <link href="~/lib/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-fileinput/css/fileinput-rtl.css" rel="stylesheet" />
+
+    <script src="~/lib/bootstrap-fileinput/js/plugins/piexif.js"></script>
+    <script src="~/lib/bootstrap-fileinput/js/plugins/sortable.js"></script>
+    <script src="~/lib/bootstrap-fileinput/js/fileinput.js"></script>
+    <script>
+        $(() => {
+            debugger;
+            alert(11);
+            $("#file-0").fileinput();
+        })
+
+    </script>
 <form class="form-horizontal">
     <div class="form-group">
         <label asp-for="Account" class="col-sm-5 control-label"></label>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <input asp-for="Account" required class="form-control" placeholder="6至24位" />
             <span asp-validation-for="Account" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="PassWord" class="col-sm-5 control-label"></label>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <input asp-for="PassWord" required class="form-control" placeholder="6至24位">
             <span asp-validation-for="PassWord" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="UserName" class="col-sm-5 control-label"></label>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <input asp-for="UserName" required class="form-control" placeholder="">
             <span asp-validation-for="UserName" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="Gender" class="col-sm-5 control-label"></label>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <select asp-items="Html.GetEnumSelectList<Gender>()" class="form-control" asp-for="Gender"></select>
             <span asp-validation-for="Gender" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="Phone" class="col-sm-5 control-label"></label>
-        <div class="col-sm-2">
-            <input asp-for="Phone"  class="form-control input-file uniform_on" type="file" accept="image/*" placeholder="">
+        <div class="col-sm-3">
+            <input asp-for="Phone" class="form-control input-file uniform_on" type="file" accept="image/*" placeholder="">
         </div>
     </div>
     <div class="form-group">
         <label asp-for="DeptId" class="col-sm-5 control-label"></label>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <select asp-items="@(new SelectList(depts,"ID","DeptName"))" required class="form-control" asp-for="DeptId"></select>
             <span asp-validation-for="DeptId" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="Photo" class="col-sm-5 control-label"></label>
-        <div class="col-sm-2">
-            <input asp-for="Photo"   class="form-control" placeholder="">
-            <input  asp-for="CreateDate" hidden/>
+        <div class="col-sm-3">
+            <input asp-for="Photo" class="form-control" placeholder="">
+            <input asp-for="CreateDate" hidden />
         </div>
     </div>
     <div class="form-group">
-        <div class="col-sm-offset-5 col-sm-2">
+        <label asp-for="Photo" class="col-sm-5 control-label"></label>
+        <div class="col-sm-3">
+            <h5>Preupload Validation</h5>
+            <input id="file-0" name="file-0" type="file">
+        
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-5 col-sm-3">
             <button type="submit" class="btn btn-default">Sign in</button>
         </div>
     </div>

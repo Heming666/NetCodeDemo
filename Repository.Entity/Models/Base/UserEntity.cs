@@ -60,7 +60,7 @@ namespace Repository.Entity.Models.Base
 
         public DateTime  ModifyDate { get; set; }
 
-        [ForeignKey("DeptId"), Display(Name = "照片")]
+        [ForeignKey("DeptId"), Display(Name = "部门")]
         public int DeptId { get; set; }
         public DepartmentEntity DeptInfo { get; set; }
 
