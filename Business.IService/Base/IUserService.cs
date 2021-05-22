@@ -13,5 +13,6 @@ namespace Business.IService.Base
     {
         List<UserEntity> GetList(Expression<Func<UserEntity, bool>> expression);
         void Insert(UserEntity entity);
+        Task<bool> Register(UserEntity user);
     }
 }

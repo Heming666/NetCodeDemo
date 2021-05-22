@@ -62,6 +62,7 @@ namespace Repository.Entity.Models.Base
 
         [ForeignKey("DeptId"), Display(Name = "部门")]
         public int DeptId { get; set; }
+
         public DepartmentEntity DeptInfo { get; set; }
 
         public List<ConsumeEntity> ConsumeEntitys { get; set; }
