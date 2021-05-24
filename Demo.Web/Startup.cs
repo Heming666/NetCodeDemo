@@ -46,7 +46,7 @@ namespace Demo.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<Util.Log.ILoggerFactory>(x =>
+            services.AddSingleton<Util.Log.ILoggerFactory>(x =>
             {
                 return new NLogService("XmlConfig/NLog.config");
             });

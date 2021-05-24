@@ -15,6 +15,8 @@ namespace Demo.Web.Controllers
         }
         public IActionResult Index()
         {
+            _factory.Info("ces");
+            throw new System.Exception("1231231");
             return View();
         }
 

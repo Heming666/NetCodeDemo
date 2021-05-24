@@ -1,4 +1,4 @@
-﻿@{
+﻿ @{
     var action = Context.Request.RouteValues["action"].ToString().ToLower() ;
     var controller = Context.Request.RouteValues["controller"].ToString().ToLower();
     var area = Context.Request.RouteValues["area"]?.ToString().ToLower();
@@ -27,6 +27,7 @@
 
                         </a>
                         <ul class="dropdown-menu">
+
                             <li>
                                 <a tabindex="-1" href="#">个人资料</a>
                             </li>
