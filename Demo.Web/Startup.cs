@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using System.Net;
 using Business.Service.Customer;
 using Business.IService.Customer;
+using Demo.Web.Handler;
 
 namespace Demo.Web
 {
@@ -114,6 +115,7 @@ namespace Demo.Web
             app.UseHttpsRedirection();//HTTPSÌø×ª
             app.UseStaticFiles();//¾²Ì¬ÎÄ¼þ
             app.UseAuthorization();
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             //app.UseExceptionHandler(option => option.Run(async context =>
             //{
             //    await Task.Run(() =>
