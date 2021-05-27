@@ -20,6 +20,9 @@ using System.Net;
 using Business.Service.Customer;
 using Business.IService.Customer;
 using Demo.Web.Handler;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace Demo.Web
 {
@@ -51,6 +54,7 @@ namespace Demo.Web
             {
                 return new NLogService("XmlConfig/NLog.config");
             });
+            services.AddDataProtection();//开启Windows DPAPI 自动加密
             services.AddResponseCompression();
             services.AddControllersWithViews();
             services.AddSession();
@@ -59,6 +63,8 @@ namespace Demo.Web
            {
                options.AllowSynchronousIO = true;
            });
+            services.AddDirectoryBrowser();//启动目录浏览
+
             services.AddScoped<DbContext, MySqlDBContext>();
             //注入mysqlDbcontext
             services.AddDbContext<MySqlDBContext>(option =>
@@ -89,20 +95,39 @@ namespace Demo.Web
 
             //        });
             //});
-            services.AddScoped<IRepositoryFactory, RepositoryFactory>();
+            services.AddScoped<IRepositoryFactory, RepositoryFactory>();//注册数据工厂
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IComsumeService, ComsumeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, Util.Log.ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IAntiforgery antiforgery)
         {
             if (Env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-     
+            else
+            {
+                //非开发环境，则记录日志 ，并处理http请求
+                app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            }
+            //阻止跨站点攻击XSRF/CSRF
+            app.Use(next => context =>
+            {
+                string path = context.Request.Path.Value;
+                if (
+                    string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(path, "/login/login", StringComparison.OrdinalIgnoreCase))
+                {
+                    var tokens = antiforgery.GetAndStoreTokens(context);
+                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
+                        new CookieOptions() { HttpOnly = false });
+                }
+                return next(context);
+            });
+
             app.UseCookiePolicy();
             app.UseRequestLocalization();
             app.UseCors();
@@ -110,28 +135,22 @@ namespace Demo.Web
             app.UseSession();
             app.UseResponseCompression();//响应压缩， 必须注册中间件services.AddResponseCompression();
             app.UseResponseCaching();
-
             app.UseRouting();
             app.UseHttpsRedirection();//HTTPS跳转
             app.UseStaticFiles();//静态文件
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+          Path.Combine(Directory.GetCurrentDirectory(), @"Resource")),
+                RequestPath = new PathString("/Resource")
+            });
+            //设置能预览的文件夹与路径
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),@"wwwroot")),
+                RequestPath=new PathString("/MyFile")//URL http://localhost:xxxx/images
+            });
             app.UseAuthorization();
-            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            //app.UseExceptionHandler(option => option.Run(async context =>
-            //{
-            //    await Task.Run(() =>
-            //    {
-            //        Exception ex = context.Features.Get<IExceptionHandlerFeature>().Error;
-            //        loggerFactory.Error(ex, "全局错误");
-            //        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            //        context.Response.ContentType = "application/json";
-            //        if (ex != null)
-            //        {
-            //            var errObj = JsonConvert.SerializeObject(ex);
-            //            context.Response.WriteAsync(errObj);
-            //        }
-            //    });
-            //})
-            //);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

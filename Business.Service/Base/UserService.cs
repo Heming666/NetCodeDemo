@@ -28,7 +28,7 @@ namespace Business.Service.Base
 
         public Task<bool> Register(UserEntity user)
         {
-            return Task.Run(() => true);
+            this.Repository.Add(user);
         }
     }
 }

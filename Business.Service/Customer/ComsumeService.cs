@@ -1,5 +1,6 @@
 ﻿using Business.IService.Customer;
 using Microsoft.EntityFrameworkCore;
+using Repository.EF;
 using Repository.Entity.Models.Consume;
 using Repository.Entity.ViewModels.Index;
 using Repository.Factory;
@@ -12,20 +13,20 @@ using System.Threading.Tasks;
 
 namespace Business.Service.Customer
 {
-    public class ComsumeService : BaseService<ConsumeEntity>, IComsumeService
+    public class ComsumeService : Repository<ConsumeEntity>, IComsumeService
     {
-        public ComsumeService(IRepositoryFactory repositoryFactory, DbContext mydbcontext) : base(repositoryFactory, mydbcontext)
+        public ComsumeService(IRepositoryFactory repositoryFactory, MySqlDBContext mydbcontext) : base(mydbcontext)
         {
         }
 
-        public void Add(ConsumeEntity entity)
+        public async Task<int> Add(ConsumeEntity entity)
         {
-            this.Repository.Add(entity);
+           return await InsertAsync(entity);
         }
 
-        public List<ConsumeEntity> GetList(Expression<Func<ConsumeEntity, bool>> expression)
+        public new async Task< List<ConsumeEntity>> GetListAsync(Expression<Func<ConsumeEntity, bool>> expression)
         {
-            return this.Repository.Where(expression).OrderBy(x => x.LogTime).ToList();
+            return await Where(expression).OrderBy(x => x.LogTime).ToListAsync();
         }
 
         public async Task<List<ChartsColumnModel>> LoadColumn(Expression<Func<ConsumeEntity, bool>> expression)

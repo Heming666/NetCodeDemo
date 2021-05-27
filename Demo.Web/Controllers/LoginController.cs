@@ -1,23 +1,29 @@
 ﻿using Business.IService.Base;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Repository.Entity.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Util.Encrypt;
+using Util.Log;
 
 namespace Demo.Web.Controllers
 {
-    public class LoginController : Controller
+    public class LoginController : BaseController
     {
-        public readonly ILoggerFactory _factory;
-        public readonly IUserService _userService;
-        public readonly IDepartmentService _deptService;
-        public LoginController(ILoggerFactory factory, IUserService userService, IDepartmentService deptService)
+        private readonly IUserService _userService;
+        private readonly IDepartmentService _deptService;
+        /// <summary>
+        /// 数据加密
+        /// </summary>
+        private readonly IDataProtector _protector;
+        public LoginController(ILoggerFactory factory, IUserService userService, IDepartmentService deptService, IDataProtectionProvider protector) : base(factory)
         {
-            _factory = factory;
+            string key = "PublicKey";//key为加密公钥，私钥为系统自动维护  
+            _protector = protector.CreateProtector(key);
             _userService = userService;
             _deptService = deptService;
         }
@@ -49,18 +55,22 @@ namespace Demo.Web.Controllers
             if (ModelState.IsValid)
             {
                 var file = Request.Form.Files["Photo"];
-                string temporary = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Photo");//临时保存分块的目录
-                if (!Directory.Exists(temporary))
-                    Directory.CreateDirectory(temporary);
-                string filePath = Path.Combine(temporary, Guid.NewGuid().ToString()+Path.GetExtension(file.FileName));
-                if (!Convert.IsDBNull(file))
+                if (file != null)
                 {
-
+                    string temporary = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource/Photo");//临时保存分块的目录
+                    if (!Directory.Exists(temporary))
+                        Directory.CreateDirectory(temporary);
+                    string filePath = Path.Combine(temporary, Guid.NewGuid().ToString() + Path.GetExtension(file.FileName));
                     using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                     {
                         await file.CopyToAsync(fs);
                     }
                 }
+                var a = _protector.Protect("1");
+                Console.WriteLine(a);
+                var b = _protector.Unprotect(a);
+                Console.WriteLine(b);
+                user.PassWord = MD5Encrypt.MD5Encrypt16(user.PassWord);
                 bool isOK = await _userService.Register(user);
                 return RedirectToAction(nameof(Login));
             }

@@ -32,6 +32,7 @@
     <ProjectReference Include="..\Business.Service\Business.Service.csproj" />
     <ProjectReference Include="..\Repository.Entity\Repository.Entity.csproj" />
     <ProjectReference Include="..\Ripository.EF\Repository.EF.csproj" />
+    <ProjectReference Include="..\Util.Encrypt\Util.Encrypt.csproj" />
     <ProjectReference Include="..\Util.Extension\Util.Extension.csproj" />
     <ProjectReference Include="..\Util.Log\Util.Log.csproj" />
   </ItemGroup>
@@ -52,6 +53,7 @@
     <Folder Include="Areas\Customer\Data\" />
     <Folder Include="Areas\Customer\Models\" />
     <Folder Include="wwwroot\lib\bootstrap\" />
+    <Folder Include="Resource\" />
   </ItemGroup>
 
 </Project>

@@ -10,8 +10,13 @@ namespace Demo.Web.Controllers
 {
     public class BaseController : Controller
     {
-        public BaseController() 
+        /// <summary>
+        /// 日志工程
+        /// </summary>
+        public readonly ILoggerFactory logger;
+        public BaseController(ILoggerFactory loggerFactory) 
         {
+            logger = loggerFactory;
         }
     }
 }

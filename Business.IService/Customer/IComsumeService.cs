@@ -12,7 +12,7 @@ namespace Business.IService.Customer
     public interface IComsumeService
     {
         List<ConsumeEntity> GetList(Expression<Func<ConsumeEntity, bool>> expression);
-        void Add(ConsumeEntity entity);
+        Task Add(ConsumeEntity entity);
         Task<List<ChartsPieModel>> LoadPie(Expression<Func<ConsumeEntity,bool>> expression);
         Task<List<ChartsColumnModel>> LoadColumn(Expression<Func<ConsumeEntity, bool>> expression);
         Task<List<ChartsColumnModel>> LoadMonthColumn(Expression<Func<ConsumeEntity, bool>> expression);

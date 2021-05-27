@@ -6,17 +6,15 @@ namespace Demo.Web.Controllers
 {
     public class HomeController : BaseController
     {
-        public readonly ILoggerFactory _logfactory;
-        public readonly IComsumeService _customer;
-        public HomeController(ILoggerFactory factory, IComsumeService comsumeService)
+        private readonly IComsumeService _customer;
+
+        public HomeController( IComsumeService comsumeService,ILoggerFactory logger) :base(logger)
         {
-            _logfactory = factory;
             _customer = comsumeService;
         }
         public IActionResult Index()
         {
-            _logfactory.Info("ces");
-            throw new System.Exception("1231231");
+            logger.Info("ces");
             return View();
         }
 

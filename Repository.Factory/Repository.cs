@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 
 namespace Repository.Factory
 {
-    public class Repository<T> : IRepository<T> where T : class, new()
+    public class Repository<T>  where T : class, new()
     {
         private DbContext _dbContext;
         private readonly DbSet<T> _dbSet;
         private readonly string _connStr;
-
+        public Repository()
+        {
+        }
         public Repository(DbContext mydbcontext)
         {
             this._dbContext = mydbcontext;
@@ -72,16 +74,21 @@ namespace Repository.Factory
             get { return this._dbSet; }
         }
 
-        public T Add(T entity, bool isSave = true)
+        public async  Task<T> InsertAsync(T entity, bool isSave = true)
         {
-            this._dbSet.Add(entity);
+            await this._dbSet.AddAsync(entity);
             if (isSave)
             {
                 this.SaveChanges();
             }
             return entity;
         }
-
+        public async  Task<int> InsertAsync(T entity)
+        {
+            await this._dbSet.AddAsync(entity);
+            return this.SaveChanges();
+             
+        }
         public void AddRange(IEnumerable<T> entitys, bool isSave = true)
         {
             this._dbSet.AddRange(entitys);
@@ -350,10 +357,6 @@ namespace Repository.Factory
         {
             this._dbContext.Dispose();
         }
+
     }
-
-    public class Repository
-    { 
-        }
-
 }

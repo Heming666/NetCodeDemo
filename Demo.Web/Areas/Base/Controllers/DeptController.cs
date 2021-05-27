@@ -14,8 +14,8 @@ namespace Demo.Web.Areas.Base.Controllers
     [Area("Base")]
     public class DeptController : Controller
     {
-        public ILoggerFactory _log { get; }
-        public IDepartmentService _deptService { get; }
+        private ILoggerFactory _log { get; }
+        private IDepartmentService _deptService { get; }
 
         public DeptController(ILoggerFactory factory, IDepartmentService departmentService)
         {

@@ -24,20 +24,20 @@ namespace Repository.Entity.Models.Base
         /// <summary>
         /// 账户
         /// </summary>
-        [Required(ErrorMessage ="账号不能为空"),MinLength(6),MaxLength(24), Comment("账户"), Display(Name = "账号")]
+        [Required(ErrorMessage ="账号不能为空"),MinLength(2,ErrorMessage ="账号的最小长度不能少于2"),MaxLength(24), Comment("账户"), Display(Name = "账号")]
         //[ConcurrencyCheck]并发标记
         public string  Account { get; set; }
 
         /// <summary>
         /// 密码
         /// </summary>
-        [Required(ErrorMessage = "密码不能为空"), MinLength(6), MaxLength(24), Comment("密码"),DataType(DataType.Password), Display(Name = "密码")]
+        [Required(ErrorMessage = "密码不能为空"), MinLength(2, ErrorMessage = "密码的最小长度不能少于2"), MaxLength(24), Comment("密码"),DataType(DataType.Password), Display(Name = "密码")]
         public string  PassWord { get; set; }
 
         /// <summary>
         /// 用户昵称
         /// </summary>
-        [Required(ErrorMessage = "用户昵称不能为空"), MinLength(1), MaxLength(24), Comment("用户昵称"), Display(Name = "昵称")]
+        [Required(ErrorMessage = "用户昵称不能为空"),  MaxLength(24), Comment("用户昵称"), Display(Name = "昵称")]
         public string  UserName { get; set; }
 
         /// <summary>

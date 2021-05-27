@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Service
+namespace Repository.Factory
 {
     public class BaseService<TEntity> : IBaseService where TEntity : class, new()
     {

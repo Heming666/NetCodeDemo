@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.IService.Base
+namespace Repository.Factory
 {
   public   interface IBaseService 
     {

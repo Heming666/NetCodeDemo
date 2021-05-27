@@ -46,10 +46,24 @@ namespace Demo.Web.Handler
             {
                 _logger.Error(context.Request.Host.Value + context.Request.Path.Value + "\r\n" + JsonConvert.SerializeObject(e));
             }
-            var data = new { code = statusCode.ToString(), is_success = false, msg = e.Message };
-            var result = JsonConvert.SerializeObject(new { data = data });
-            context.Response.ContentType = "application/json;charset=utf-8";
-            return context.Response.WriteAsync(result);
+            if (IsAjaxRequest(context))
+            {
+                var data = new { code = statusCode.ToString(), is_success = false, msg = e.Message };
+                var result = JsonConvert.SerializeObject(new { data = data });
+                context.Response.ContentType = "application/json;charset=utf-8";
+                return context.Response.WriteAsync(result);
+            }
+            else
+            {
+                return Task.Run(() => { context.Response.Redirect("/Error"); });
+            }
+         
+        }
+
+        private bool IsAjaxRequest(HttpContext context)
+        {
+            string header = context.Request.Headers["X-Requested-With"];
+            return "XMLHttpRequest".Equals(header);
         }
     }
 }
