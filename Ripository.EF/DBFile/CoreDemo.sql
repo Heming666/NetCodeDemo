@@ -11,7 +11,7 @@
  Target Server Version : 80024
  File Encoding         : 65001
 
- Date: 15/05/2021 00:49:41
+ Date: 24/05/2021 23:00:58
 */
 
 SET NAMES utf8mb4;
@@ -82,7 +82,7 @@ CREATE TABLE `User_ConsumeEntity`  (
   INDEX `Index_ID1`(`ID`) USING BTREE,
   INDEX `IX_User_ConsumeEntity_UserId`(`UserId`) USING BTREE,
   CONSTRAINT `FK_User_ConsumeEntity_Base_UserInfo_UserId` FOREIGN KEY (`UserId`) REFERENCES `Base_UserInfo` (`ID`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '消费支出明细表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 57 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '消费支出明细表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of User_ConsumeEntity
@@ -124,6 +124,24 @@ INSERT INTO `User_ConsumeEntity` VALUES (35, '桥头排骨', 20.00, '雄楚一�
 INSERT INTO `User_ConsumeEntity` VALUES (36, '龙门花甲', 46.00, '雄楚一号', NULL, 0, '2021-05-14 23:58:14.000000', '2021-05-14 23:58:47.727000', 1);
 INSERT INTO `User_ConsumeEntity` VALUES (37, '面包', 11.80, '雄楚一号', NULL, 0, '2021-05-14 23:59:14.000000', '2021-05-14 23:59:00.415000', 1);
 INSERT INTO `User_ConsumeEntity` VALUES (38, '硬红楼', 200.00, '梁山头', NULL, 0, '2021-05-14 23:59:14.000000', '2021-05-12 20:59:19.008000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (39, '早餐', 11.00, NULL, NULL, 0, '2021-05-16 22:03:16.000000', '2021-05-15 22:03:35.841000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (40, '给妹妹买衣服', 277.72, NULL, NULL, 2, '2021-05-16 22:04:16.000000', '2021-05-15 22:04:41.717000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (41, '鄂州消费', 130.00, NULL, NULL, 0, '2021-05-16 22:05:16.000000', '2021-05-15 22:05:10.352000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (42, '槟榔', 35.00, NULL, NULL, 0, '2021-05-16 22:06:16.000000', '2021-05-15 22:06:09.990000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (43, '给舅舅买车票', 168.00, NULL, NULL, 4, '2021-05-16 22:06:16.000000', '2021-05-16 22:06:46.834000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (44, '电视', 850.00, NULL, NULL, 2, '2021-05-16 22:17:16.000000', '2021-05-16 22:17:48.544000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (45, '房租', 746.00, NULL, NULL, 3, '2021-05-19 23:28:19.000000', '2021-05-17 23:28:05.950000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (46, '水果', 9.60, '关西小区', NULL, 0, '2021-05-19 23:28:19.000000', '2021-05-18 23:28:26.769000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (47, '晚餐', 74.00, NULL, '光谷天地-加班', 0, '2021-05-19 23:29:19.000000', '2021-05-19 23:29:05.490000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (48, '点痣膏', 56.26, '淘宝', NULL, 6, '2021-05-19 23:29:19.000000', '2021-05-19 23:29:50.061000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (49, '饮料-可乐', 6.00, '公司', NULL, 0, '2021-05-19 23:30:19.000000', '2021-05-18 23:30:13.044000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (50, '一条红楼', 200.00, NULL, NULL, 0, '2021-05-20 22:26:20.000000', '2021-05-20 22:26:52.549000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (51, '槟榔', 35.00, NULL, NULL, 0, '2021-05-20 22:27:20.000000', '2021-05-20 22:27:08.877000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (52, '520买菜', 49.00, '八一花园', NULL, 0, '2021-05-20 22:28:20.000000', '2021-05-20 22:28:14.523000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (53, '鸡公煲', 50.00, '八一花园', NULL, 0, '2021-05-23 18:20:23.000000', '2021-05-21 18:20:37.142000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (54, '周末消费', 87.00, '鄂州', NULL, 0, '2021-05-23 18:21:23.000000', '2021-05-23 18:21:00.471000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (55, '麦克风', 150.00, '京东', NULL, 3, '2021-05-24 22:58:24.000000', '2021-05-24 22:58:48.282000', 1);
+INSERT INTO `User_ConsumeEntity` VALUES (56, '吃饭', 20.00, NULL, NULL, 0, '2021-05-24 22:59:24.000000', '2021-05-24 22:59:31.979000', 1);
 
 -- ----------------------------
 -- Table structure for __EFMigrationsHistory

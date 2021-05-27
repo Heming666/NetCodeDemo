@@ -11,8 +11,8 @@ namespace Business.IService.Base
 {
     public interface IUserService
     {
-        List<UserEntity> GetList(Expression<Func<UserEntity, bool>> expression);
-        void Insert(UserEntity entity);
-        Task<bool> Register(UserEntity user);
+        Task<List<UserEntity>> GetList(Expression<Func<UserEntity, bool>> expression);
+        Task<int> Insert(UserEntity entity);
+        Task<int> Register(UserEntity user);
     }
 }

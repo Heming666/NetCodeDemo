@@ -24,14 +24,14 @@ namespace Business.Service.Customer
            return await InsertAsync(entity);
         }
 
-        public new async Task< List<ConsumeEntity>> GetListAsync(Expression<Func<ConsumeEntity, bool>> expression)
+        public  async Task< List<ConsumeEntity>> GetListAsync(Expression<Func<ConsumeEntity, bool>> expression)
         {
             return await Where(expression).OrderBy(x => x.LogTime).ToListAsync();
         }
 
         public async Task<List<ChartsColumnModel>> LoadColumn(Expression<Func<ConsumeEntity, bool>> expression)
         {
-            var data = await this.Repository.Where(expression).GroupBy(x => new { x.Classify, Month = x.LogTime.Month }, (x, y) => new { Total = y.Sum(p => p.Amount), Classify = x.Classify, x.Month }).Select(x => x).ToListAsync();
+            var data = await Where(expression).GroupBy(x => new { x.Classify, Month = x.LogTime.Month }, (x, y) => new { Total = y.Sum(p => p.Amount), Classify = x.Classify, x.Month }).Select(x => x).ToListAsync();
             var classifyGroup = data.GroupBy(x => x.Classify).Select(x => new { x.Key, monthDatas = x }).ToList();
             List<ChartsColumnModel> charts = new();
             classifyGroup.ForEach(x =>
@@ -74,7 +74,7 @@ namespace Business.Service.Customer
         public async Task<List<ChartsColumnModel>> LoadMonthColumn(Expression<Func<ConsumeEntity, bool>> expression)
         {
             DateTime now = DateTime.Now;
-            var data = await this.Repository.Where(expression).GroupBy(x => new { x.Classify, Day = x.LogTime.Day }, (x, y) => new { Total = y.Sum(p => p.Amount), Classify = x.Classify, x.Day }).Select(x => x).ToListAsync();
+            var data = await Where(expression).GroupBy(x => new { x.Classify, Day = x.LogTime.Day }, (x, y) => new { Total = y.Sum(p => p.Amount), Classify = x.Classify, x.Day }).Select(x => x).ToListAsync();
             var classifyGroup = data.GroupBy(x => x.Classify).Select(x =>  x.Key ).ToList();
             List<ChartsColumnModel> charts = new();
             charts.Add(new ChartsColumnModel("总消费"));
@@ -110,7 +110,7 @@ namespace Business.Service.Customer
         /// <returns></returns>
         public async Task<List<ChartsPieModel>> LoadPie(Expression<Func<ConsumeEntity, bool>> expression)
         {
-            var data = await this.Repository.Where(expression).GroupBy(x => x.Classify, (x, y) => new { Total = y.Sum(p => p.Amount), Classify = x }).Select(x => x).ToListAsync();
+            var data = await Where(expression).GroupBy(x => x.Classify, (x, y) => new { Total = y.Sum(p => p.Amount), Classify = x }).Select(x => x).ToListAsync();
             return data.Select(x => new ChartsPieModel(Enum.GetName(x.Classify), x.Total)).ToList();
         }
     }

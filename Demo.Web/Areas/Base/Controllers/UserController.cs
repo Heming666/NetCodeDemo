@@ -29,7 +29,7 @@ namespace Demo.Web.Areas.Base.Controllers
         //[Authorize(Roles = "admin")]
         public IActionResult Index()
         {
-            List<UserEntity> users = _userService.GetList(ExpressionExtension.True<UserEntity>());
+            var users = _userService.GetList(ExpressionExtension.True<UserEntity>());
             return View(users);
         }
         // GET: DeptController/Create

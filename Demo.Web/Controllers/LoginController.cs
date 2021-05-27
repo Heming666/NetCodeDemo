@@ -71,7 +71,7 @@ namespace Demo.Web.Controllers
                 var b = _protector.Unprotect(a);
                 Console.WriteLine(b);
                 user.PassWord = MD5Encrypt.MD5Encrypt16(user.PassWord);
-                bool isOK = await _userService.Register(user);
+                bool isOK = await _userService.Register(user) >0;
                 return RedirectToAction(nameof(Login));
             }
             else

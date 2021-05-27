@@ -1,5 +1,4 @@
-﻿using Business.IService.Base;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Repository.Factory;
 using System;
 using System.Collections.Generic;

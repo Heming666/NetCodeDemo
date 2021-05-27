@@ -33,7 +33,7 @@ namespace Demo.Web.Areas.Customer.Controllers
         {
             var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == UserId);
             if (classify.HasValue) where = where.And(x => x.Classify == (Classify)classify.Value);
-            List<ConsumeEntity> datas = _customer.GetList(where);
+            var datas = _customer.GetListAsync(where);
             ViewBag.UserId = UserId;
             return View(datas);
         }
@@ -48,7 +48,7 @@ namespace Demo.Web.Areas.Customer.Controllers
         {
             var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == UserId);
             if (classify.HasValue) where = where.And(x => x.Classify == (Classify)classify.Value);
-            List<ConsumeEntity> datas = _customer.GetList(where);
+            var datas = _customer.GetListAsync(where);
             ViewBag.UserId = UserId;
             return View(nameof(Index),datas);
         }

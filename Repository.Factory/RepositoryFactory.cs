@@ -11,7 +11,7 @@ namespace Repository.Factory
     {
         public IRepository<TEntity> CreateRepository<TEntity>(DbContext mydbcontext) where TEntity : class,new()
         {
-            return new Repository<TEntity>(mydbcontext);
+            return new RepositoryTest<TEntity>(mydbcontext);
         }
     }
 }

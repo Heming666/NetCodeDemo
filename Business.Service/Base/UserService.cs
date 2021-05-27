@@ -10,25 +10,25 @@ using System.Threading.Tasks;
 
 namespace Business.Service.Base
 {
-    public class UserService : BaseService<UserEntity>, IUserService
+    public class UserService : Repository<UserEntity>, IUserService
     {
-        public UserService(IRepositoryFactory repositoryFactory, DbContext mydbcontext) : base(repositoryFactory, mydbcontext)
+        public UserService( DbContext mydbcontext) : base( mydbcontext)
         {
         }
      
-        public List<UserEntity> GetList(Expression<Func<UserEntity, bool>> expression)
+        public async Task<List<UserEntity>> GetList(Expression<Func<UserEntity, bool>> expression)
         {
-            return this.Repository.Where(expression).ToList();
+            return await Where(expression).ToListAsync();
         }
 
-        public void Insert(UserEntity entity)
+        public async Task<int> Insert(UserEntity entity)
         {
-            this.Repository.Add(entity);
+          return await  InsertAsync(entity);
         }
 
-        public Task<bool> Register(UserEntity user)
+        public async Task<int> Register(UserEntity user)
         {
-            this.Repository.Add(user);
+            return await InsertAsync(user);
         }
     }
 }
