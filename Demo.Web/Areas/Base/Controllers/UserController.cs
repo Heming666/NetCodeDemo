@@ -27,15 +27,15 @@ namespace Demo.Web.Areas.Base.Controllers
             this._deptService = departmentService;
         }
         //[Authorize(Roles = "admin")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var users = _userService.GetList(ExpressionExtension.True<UserEntity>());
+            var users =await _userService.GetList(ExpressionExtension.True<UserEntity>());
             return View(users);
         }
         // GET: DeptController/Create
-        public ActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            List<DepartmentEntity> depts = _deptService.GetList(ExpressionExtension.True<DepartmentEntity>());
+           var depts =await _deptService.GetList(ExpressionExtension.True<DepartmentEntity>());
             ViewBag.Depts = depts;
             return View();
         }
@@ -43,11 +43,11 @@ namespace Demo.Web.Areas.Base.Controllers
         // POST: DeptController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(UserEntity entity)
+        public async Task<IActionResult> Create(UserEntity entity)
         {
             try
             {
-                _userService.Insert(entity);
+               await _userService.Insert(entity);
                 return RedirectToAction(nameof(Index));
             }
             catch( Exception ex)

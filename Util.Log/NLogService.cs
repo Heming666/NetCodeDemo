@@ -1,15 +1,27 @@
-﻿using System;
+﻿using NLog;
+using System;
+using Util.Extension;
 
 namespace Util.Log
 {
     public class NLogService : ILoggerFactory
     {
-        private readonly NLog.Logger _logger;
+        public static  NLog.Logger _logger { get; private set; }
         public NLogService(string configPath)
         {
-            _logger = NLog.LogManager.LoadConfiguration(configPath).GetCurrentClassLogger();
+            _logger = LogManager.LoadConfiguration(configPath).GetCurrentClassLogger();
         }
-
+        /// <summary>
+        /// 自定义文件存放位置
+        /// </summary>
+        /// <param name="directoryName"></param>
+        public void Setting(string directoryName)
+        {
+            if (!directoryName.IsEmpty())
+            {
+                LogManager.Configuration.Variables["cuspath"] = directoryName + "/";
+            }
+        }
         public void Debug(string message)
         {
             _logger.Debug(message);

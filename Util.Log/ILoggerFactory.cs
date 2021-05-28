@@ -13,5 +13,10 @@ namespace Util.Log
         void Debug<T>(T logEntity);
         void Warn<T>(T logEntity);
         void Error<T>(T logEntity);
+        /// <summary>
+        /// 设置文件存储路径
+        /// </summary>
+        /// <param name="directoryName">文件存储路径的文件夹的名称</param>
+        void Setting(string directoryName);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Business.IService.Customer;
+using Demo.Web.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Entity.Models.Consume;
@@ -13,14 +14,12 @@ using Util.Log;
 namespace Demo.Web.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    public class ComsumeController : Controller
+    public class ComsumeController : BaseController
     {
-        private readonly ILoggerFactory _logger;
         private readonly IComsumeService _customer;
 
-        public ComsumeController(ILoggerFactory logger,IComsumeService comsumeService)
+        public ComsumeController(ILoggerFactory logger,IComsumeService comsumeService):base(logger)
         {
-            this._logger = logger;
             this._customer = comsumeService;
         }
      /// <summary>
@@ -29,11 +28,11 @@ namespace Demo.Web.Areas.Customer.Controllers
      /// <param name="classify"></param>
      /// <param name="UserId"></param>
      /// <returns></returns>
-        public ActionResult Index(int? classify=null, int UserId=1)
+        public async Task<IActionResult> Index(int? classify=null, int UserId=1)
         {
             var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == UserId);
             if (classify.HasValue) where = where.And(x => x.Classify == (Classify)classify.Value);
-            var datas = _customer.GetListAsync(where);
+            var datas =await _customer.GetListAsync(where);
             ViewBag.UserId = UserId;
             return View(datas);
         }
@@ -44,11 +43,11 @@ namespace Demo.Web.Areas.Customer.Controllers
         /// <param name="UserId"></param>
         /// <returns></returns>
         [Route("Index"),HttpPost,ValidateAntiForgeryToken]
-        public ActionResult IndexPost(int? classify = null, int UserId = 1)
+        public async  Task<IActionResult> IndexPost(int? classify = null, int UserId = 1)
         {
             var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == UserId);
             if (classify.HasValue) where = where.And(x => x.Classify == (Classify)classify.Value);
-            var datas = _customer.GetListAsync(where);
+            var datas =await _customer.GetListAsync(where);
             ViewBag.UserId = UserId;
             return View(nameof(Index),datas);
         }
@@ -77,7 +76,7 @@ namespace Demo.Web.Areas.Customer.Controllers
             }
             catch(Exception ex)
             {
-                _logger.Error(ex);
+                logger.Error(ex);
                 return View();
             }
         }

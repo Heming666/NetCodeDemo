@@ -1,4 +1,5 @@
 ﻿using Business.IService.Base;
+using Demo.Web.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Entity.Models.Base;
@@ -12,21 +13,18 @@ using Util.Log;
 namespace Demo.Web.Areas.Base.Controllers
 {
     [Area("Base")]
-    public class DeptController : Controller
+    public class DeptController : BaseController
     {
-        private ILoggerFactory _log { get; }
         private IDepartmentService _deptService { get; }
 
-        public DeptController(ILoggerFactory factory, IDepartmentService departmentService)
+        public DeptController(ILoggerFactory factory, IDepartmentService departmentService):base(factory)
         {
-            _log = factory;
             _deptService = departmentService;
         }
         // GET: DeptController
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<DepartmentEntity> depts = _deptService.GetList(ExpressionExtension.True<DepartmentEntity>());
-            
+           var depts =await _deptService.GetList(ExpressionExtension.True<DepartmentEntity>());
             return View(depts);
         }
 
@@ -45,11 +43,11 @@ namespace Demo.Web.Areas.Base.Controllers
         // POST: DeptController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(DepartmentEntity entity)
+        public async Task<IActionResult> Create(DepartmentEntity entity)
         {
             try
             {
-                _deptService.Insert(entity);
+               await _deptService.Insert(entity);
                 return RedirectToAction(nameof(Index));
             }
             catch

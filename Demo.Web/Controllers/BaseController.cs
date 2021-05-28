@@ -17,6 +17,10 @@ namespace Demo.Web.Controllers
         public BaseController(ILoggerFactory loggerFactory) 
         {
             logger = loggerFactory;
+            var b = RouteData;
+
+            string controller = RouteData.Values["controller"].ToString();
+            logger.Setting(this.HttpContext.Request.RouteValues["controller"].ToString());
         }
     }
 }

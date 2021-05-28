@@ -11,20 +11,20 @@ using System.Threading.Tasks;
 
 namespace Business.Service.Base
 {
-    public class DepartmentService : BaseService<DepartmentEntity>, IDepartmentService
+    public class DepartmentService : Repository<DepartmentEntity>, IDepartmentService
     {
-        public DepartmentService(IRepositoryFactory repositoryFactory, DbContext mydbcontext) : base(repositoryFactory, mydbcontext)
+        public DepartmentService(DbContext mydbcontext) : base(mydbcontext)
         {
         }
 
-        public List<DepartmentEntity> GetList(Expression<Func<DepartmentEntity, bool>> expression)
+        public async Task<List<DepartmentEntity>> GetList(Expression<Func<DepartmentEntity, bool>> expression)
         {
-            return this.Repository.Where(expression).ToList();
+            return await Where(expression).ToListAsync();
         }
 
-        public void Insert(DepartmentEntity entity)
+        public async Task<int> Insert(DepartmentEntity entity)
         {
-            this.Repository.Add(entity);
+          return  await InsertAsync(entity);
         }
     }
 }

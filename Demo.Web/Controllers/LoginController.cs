@@ -44,7 +44,7 @@ namespace Demo.Web.Controllers
         public IActionResult Register()
         {
             UserEntity entity = new UserEntity() { CreateDate = DateTime.Now };
-            List<DepartmentEntity> depts = _deptService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
+            var depts = _deptService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
             ViewBag.Depts = depts;
             return View(entity);
         }
@@ -76,7 +76,7 @@ namespace Demo.Web.Controllers
             }
             else
             {
-                List<DepartmentEntity> depts = _deptService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
+                var depts = _deptService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
                 ViewBag.Depts = depts;
                 user.CreateDate = DateTime.Now;
                 return View(user);
