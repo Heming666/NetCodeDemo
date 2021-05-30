@@ -137,14 +137,14 @@ namespace Demo.Web
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
-          Path.Combine(Directory.GetCurrentDirectory(), @"Resource")),
-                RequestPath = new PathString("/Resource")
+          Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\Resource")),
+                RequestPath = new PathString("/src")
             });
-            //设置能预览的文件夹与路径
+            //设置能直接在浏览器预览的文件夹与路径
             app.UseDirectoryBrowser(new DirectoryBrowserOptions()
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),@"wwwroot")),
-                RequestPath=new PathString("/MyFile")//URL http://localhost:xxxx/images
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Files")),
+                RequestPath = new PathString("/Files")//URL http://localhost:xxxx/Files
             });
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

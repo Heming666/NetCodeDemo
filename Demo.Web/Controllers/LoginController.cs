@@ -1,5 +1,6 @@
 ﻿using Business.IService.Base;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Entity.Models.Base;
 using System;
@@ -16,16 +17,18 @@ namespace Demo.Web.Controllers
     {
         private readonly IUserService _userService;
         private readonly IDepartmentService _deptService;
+        private readonly IWebHostEnvironment _hosting;
         /// <summary>
         /// 数据加密
         /// </summary>
         private readonly IDataProtector _protector;
-        public LoginController( IUserService userService, IDepartmentService deptService, IDataProtectionProvider protector) 
+        public LoginController( IUserService userService, IDepartmentService deptService, IDataProtectionProvider protector, IWebHostEnvironment hosting) 
         {
             string key = "PublicKey";//key为加密公钥，私钥为系统自动维护    
             _protector = protector.CreateProtector(key);
             _userService = userService;
             _deptService = deptService;
+            _hosting = hosting;
         }
         /// <summary>
         /// 登录
@@ -57,14 +60,16 @@ namespace Demo.Web.Controllers
                 var file = Request.Form.Files["Photo"];
                 if (file != null)
                 {
-                    string temporary = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource/Photo");//临时保存分块的目录
+                    string newfileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string temporary = Path.Combine(_hosting.WebRootPath, "Resource/Photo");//临时保存分块的目录
                     if (!Directory.Exists(temporary))
                         Directory.CreateDirectory(temporary);
-                    string filePath = Path.Combine(temporary, Guid.NewGuid().ToString() + Path.GetExtension(file.FileName));
+                    string filePath = Path.Combine(temporary, newfileName);
                     using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                     {
                         await file.CopyToAsync(fs);
                     }
+                    user.Photo = "src/Photo/" + newfileName;
                 }
                 var a = _protector.Protect("1");
                 Console.WriteLine(a);
