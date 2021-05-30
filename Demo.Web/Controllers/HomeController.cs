@@ -4,20 +4,20 @@ using Util.Log;
 
 namespace Demo.Web.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController : Controller
     {
+        private readonly NLog.Logger logger;
         private readonly IComsumeService _customer;
 
-        public HomeController( IComsumeService comsumeService,ILoggerFactory logger) :base(logger)
+        public HomeController( IComsumeService comsumeService)
         {
+            logger = NLog.LogManager.GetCurrentClassLogger();
             _customer = comsumeService;
         }
         public IActionResult Index()
         {
-            logger.Info("ces");
+            logger.Info(111);
             return View();
         }
-
-
     }
 }

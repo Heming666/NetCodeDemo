@@ -17,7 +17,7 @@ namespace Demo.Web.Areas.Base.Controllers
     {
         private IDepartmentService _deptService { get; }
 
-        public DeptController(ILoggerFactory factory, IDepartmentService departmentService):base(factory)
+        public DeptController( IDepartmentService departmentService)
         {
             _deptService = departmentService;
         }

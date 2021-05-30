@@ -16,10 +16,12 @@ namespace Demo.Web.Areas.Customer.Controllers
     [Area("Customer")]
     public class ComsumeController : BaseController
     {
+        private readonly NLog.Logger logger;
         private readonly IComsumeService _customer;
 
-        public ComsumeController(ILoggerFactory logger,IComsumeService comsumeService):base(logger)
+        public ComsumeController(IComsumeService comsumeService)
         {
+            logger = NLog.LogManager.GetCurrentClassLogger();
             this._customer = comsumeService;
         }
      /// <summary>

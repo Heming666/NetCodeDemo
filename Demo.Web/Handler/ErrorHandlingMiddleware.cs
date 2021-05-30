@@ -14,12 +14,12 @@ namespace Demo.Web.Handler
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        public readonly ILoggerFactory _logger;
+        public readonly NLog.Logger _logger;
 
-        public ErrorHandlingMiddleware(RequestDelegate next, ILoggerFactory logger)
+        public ErrorHandlingMiddleware(RequestDelegate next)
         {
             this._next = next;
-            _logger = logger;
+            _logger = NLog.LogManager.GetCurrentClassLogger();
         }
 
         public async Task Invoke(HttpContext context)

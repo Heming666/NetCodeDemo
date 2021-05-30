@@ -1,4 +1,5 @@
 ﻿using Business.IService.Base;
+using Demo.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Entity.Models.Base;
@@ -15,27 +16,25 @@ namespace Demo.Web.Areas.Base.Controllers
     [Area("Base")]
     public class UserController : Controller
     {
-        private readonly ILoggerFactory _logFactory;
+        private readonly NLog.Logger logger;
         private readonly IUserService _userService;
         private readonly IDepartmentService _deptService;
-        public UserController(ILoggerFactory factory,
-                              IUserService userService,
+        public UserController(IUserService userService,
                               IDepartmentService departmentService)
         {
-            this._logFactory = factory;
             this._userService = userService;
             this._deptService = departmentService;
         }
         //[Authorize(Roles = "admin")]
         public async Task<IActionResult> Index()
         {
-            var users =await _userService.GetList(ExpressionExtension.True<UserEntity>());
+            var users = await _userService.GetList(ExpressionExtension.True<UserEntity>());
             return View(users);
         }
         // GET: DeptController/Create
         public async Task<IActionResult> Create()
         {
-           var depts =await _deptService.GetList(ExpressionExtension.True<DepartmentEntity>());
+            var depts = await _deptService.GetList(ExpressionExtension.True<DepartmentEntity>());
             ViewBag.Depts = depts;
             return View();
         }
@@ -47,12 +46,12 @@ namespace Demo.Web.Areas.Base.Controllers
         {
             try
             {
-               await _userService.Insert(entity);
+                await _userService.Insert(entity);
                 return RedirectToAction(nameof(Index));
             }
-            catch( Exception ex)
+            catch (Exception ex)
             {
-                _logFactory.Error(ex);
+                logger.Error(ex);
                 return View();
             }
         }

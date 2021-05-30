@@ -20,9 +20,9 @@ namespace Demo.Web.Controllers
         /// 数据加密
         /// </summary>
         private readonly IDataProtector _protector;
-        public LoginController(ILoggerFactory factory, IUserService userService, IDepartmentService deptService, IDataProtectionProvider protector) : base(factory)
+        public LoginController( IUserService userService, IDepartmentService deptService, IDataProtectionProvider protector) 
         {
-            string key = "PublicKey";//key为加密公钥，私钥为系统自动维护  
+            string key = "PublicKey";//key为加密公钥，私钥为系统自动维护    
             _protector = protector.CreateProtector(key);
             _userService = userService;
             _deptService = deptService;
@@ -45,7 +45,7 @@ namespace Demo.Web.Controllers
         {
             UserEntity entity = new UserEntity() { CreateDate = DateTime.Now };
             var depts = _deptService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
-            ViewBag.Depts = depts;
+            ViewBag.Depts = depts.Result;
             return View(entity);
         }
 

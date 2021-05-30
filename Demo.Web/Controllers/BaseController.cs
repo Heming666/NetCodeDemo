@@ -10,17 +10,9 @@ namespace Demo.Web.Controllers
 {
     public class BaseController : Controller
     {
-        /// <summary>
-        /// 日志工程
-        /// </summary>
-        public readonly ILoggerFactory logger;
-        public BaseController(ILoggerFactory loggerFactory) 
+        public BaseController()
         {
-            logger = loggerFactory;
-            var b = RouteData;
-
-            string controller = RouteData.Values["controller"].ToString();
-            logger.Setting(this.HttpContext.Request.RouteValues["controller"].ToString());
+           // NLog.Logger a = NLog.LogManager.GetCurrentClassLogger();
         }
     }
 }

@@ -50,10 +50,6 @@ namespace Demo.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<Util.Log.ILoggerFactory>(x =>
-            {
-                return new NLogService("XmlConfig/NLog.config");
-            });
             services.AddDataProtection();//¿ªÆôWindows DPAPI ×Ô¶¯¼ÓÃÜ
             services.AddResponseCompression();
             services.AddControllersWithViews();
@@ -114,19 +110,19 @@ namespace Demo.Web
                 app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             }
             //×èÖ¹¿çÕ¾µã¹¥»÷XSRF/CSRF
-            app.Use(next => context =>
-            {
-                string path = context.Request.Path.Value;
-                if (
-                    string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(path, "/login/login", StringComparison.OrdinalIgnoreCase))
-                {
-                    var tokens = antiforgery.GetAndStoreTokens(context);
-                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
-                        new CookieOptions() { HttpOnly = false });
-                }
-                return next(context);
-            });
+            //app.Use(next => context =>
+            //{
+            //    string path = context.Request.Path.Value;
+            //    if (
+            //        string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) ||
+            //        string.Equals(path, "/login/login", StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        var tokens = antiforgery.GetAndStoreTokens(context);
+            //        context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
+            //            new CookieOptions() { HttpOnly = false });
+            //    }
+            //    return next(context);
+            //});
 
             app.UseCookiePolicy();
             app.UseRequestLocalization();
