@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Repository.Entity.Models.Base
 {
@@ -24,6 +25,7 @@ namespace Repository.Entity.Models.Base
         /// <summary>
         /// 账户
         /// </summary>
+        [Remote(action: "VerifyAccount", controller: "Login", AdditionalFields = nameof(Account))]
         [Required(ErrorMessage ="账号不能为空"),MinLength(2,ErrorMessage ="账号的最小长度不能少于2"),MaxLength(24), Comment("账户"), Display(Name = "账号")]
         //[ConcurrencyCheck]并发标记
         public string  Account { get; set; }

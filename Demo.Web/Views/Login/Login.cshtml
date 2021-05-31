@@ -1,14 +1,19 @@
-﻿@{ 
+﻿@{
     Layout = "~/Views/Shared/_EmptyLayout.cshtml";
 }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
 <div class="container" id="login">
-    <form class="form-signin text-center" action="index.html">
+    <form class="form-signin text-center" asp-action="Login" method="post">
         <h2 class="form-signin-heading">登录</h2>
         <input type="text" name="Account" class="input-block-level" placeholder="用户名">
         <input type="password" name="PassWord" class="input-block-level" placeholder="密码">
-        <label class="checkbox input-block-level" >
+        <label class="checkbox input-block-level">
             <input type="checkbox" name="IsRememberMe" value="remember-me"> 记住密码
         </label>
+        <br />
+        <span style="color:red;"> @Html.ValidationMessage("Error")</span>
+        <br />
         <button class="btn btn-large btn-primary" ; type="submit">登录</button>
         <a asp-action="Register">注册</a>
     </form>

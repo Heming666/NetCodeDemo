@@ -15,7 +15,12 @@ namespace Business.Service.Base
         public UserService( DbContext mydbcontext) : base( mydbcontext)
         {
         }
-     
+
+        public Task<bool> ExistsAccount(string account)
+        {
+            return AnyAsync(p => p.UserName == account);
+        }
+
         public async Task<List<UserEntity>> GetList(Expression<Func<UserEntity, bool>> expression)
         {
             return await Where(expression).ToListAsync();

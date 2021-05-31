@@ -168,7 +168,10 @@ namespace Repository.Factory
         {
             return this._dbSet.AsNoTracking().Any(@where);
         }
-
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> @where)
+        {
+            return await this._dbSet.AsNoTracking().AnyAsync(@where);
+        }
         public int Count()
         {
             return this._dbSet.AsNoTracking().Count();

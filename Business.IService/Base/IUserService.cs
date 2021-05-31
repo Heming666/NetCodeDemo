@@ -14,5 +14,6 @@ namespace Business.IService.Base
         Task<List<UserEntity>> GetList(Expression<Func<UserEntity, bool>> expression);
         Task<int> Insert(UserEntity entity);
         Task<int> Register(UserEntity user);
+        Task<bool> ExistsAccount(string account);
     }
 }

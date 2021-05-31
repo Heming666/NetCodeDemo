@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Repository.Entity.Models.Base;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace Demo.Web.Controllers
             _hosting = hosting;
         }
         /// <summary>
-        /// 登录
+        /// 登录页面
         /// </summary>
         /// <returns></returns>
         public IActionResult Login()
@@ -39,16 +40,26 @@ namespace Demo.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 登录方法
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost, AutoValidateAntiforgeryToken]
+        public IActionResult Login(UserEntity user)
+        {
+            ModelState.AddModelError("Error", "测试测试测试测试测试测试");
+            return View();
+        }
 
         /// <summary>
         /// 注册页面
         /// </summary>
         /// <returns></returns>
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
             UserEntity entity = new UserEntity() { CreateDate = DateTime.Now };
-            var depts = _deptService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
-            ViewBag.Depts = depts.Result;
+            var depts =await _deptService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
+            ViewBag.Depts = depts;
             return View(entity);
         }
 
@@ -81,11 +92,26 @@ namespace Demo.Web.Controllers
             }
             else
             {
-                var depts = _deptService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
+                var depts = await _deptService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
                 ViewBag.Depts = depts;
                 user.CreateDate = DateTime.Now;
                 return View(user);
             }
+        }
+
+        /// <summary>
+        /// 验证账号是否存在
+        /// </summary>
+        /// <param name="account">账号</param>
+        /// <returns></returns>
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> VerifyAccount(string account)
+        {
+            if (await _userService.ExistsAccount(account))
+            {
+                return Json($"账号已存在");
+            }
+            return Json(true);
         }
     }
 }
