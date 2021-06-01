@@ -186,7 +186,10 @@ namespace Repository.Factory
         {
             return this._dbSet.AsNoTracking().FirstOrDefault(@where);
         }
-
+        public async Task<T> FirstOrDefaultAsnyc(Expression<Func<T, bool>> @where)
+        {
+            return await this._dbSet.AsNoTracking().FirstOrDefaultAsync(@where);
+        }
         public T FirstOrDefault<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, bool isDesc = false)
         {
             if (isDesc)

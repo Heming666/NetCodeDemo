@@ -1,6 +1,8 @@
 ﻿using Business.IService.Base;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Repository.Entity.Models.Base;
@@ -8,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Util.Encrypt;
 using Util.Log;
@@ -45,11 +48,59 @@ namespace Demo.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost, AutoValidateAntiforgeryToken]
-        public IActionResult Login(UserEntity user)
+        public async Task<IActionResult> Login(IFormCollection forms)
         {
+            string account = forms["Account"], password = forms["PassWord"], isRemember = forms["IsRememberMe"];
+            UserEntity user = await _userService.GetEntity(p => p.Account == account);
+            if (isRemember.Equals("remember-me"))
+            {
+                //记住密码
+                var claims = new List<Claim>
+{
+    new Claim(ClaimTypes.Name, account),
+    new Claim("FullName", user.UserName),
+    new Claim(ClaimTypes.Role, "Administrator"),
+};
+
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(20)
+                    //AllowRefresh = <bool>,
+                    // Refreshing the authentication session should be allowed.
+
+                    //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                    // The time at which the authentication ticket expires. A 
+                    // value set here overrides the ExpireTimeSpan option of 
+                    // CookieAuthenticationOptions set with AddCookie.
+
+                    //IsPersistent = true,
+                    // Whether the authentication session is persisted across 
+                    // multiple requests. When used with cookies, controls
+                    // whether the cookie's lifetime is absolute (matching the
+                    // lifetime of the authentication ticket) or session-based.
+
+                    //IssuedUtc = <DateTimeOffset>,
+                    // The time at which the authentication ticket was issued.
+
+                    //RedirectUri = <string>
+                    // The full path or absolute URI to be used as an http 
+                    // redirect response value.
+                };
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
+            }
+
             ModelState.AddModelError("Error", "测试测试测试测试测试测试");
             return View();
         }
+
 
         /// <summary>
         /// 注册页面

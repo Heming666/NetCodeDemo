@@ -39,7 +39,10 @@
                     });
                 }
                 /**加载饼图**/
-                 Highcharts.chart('pie', {
+                Highcharts.chart('pie', {
+                    lang: {
+                        noData: '暂无数据'
+                    },
                     chart: {
                         plotBackgroundColor: null,
                         plotBorderWidth: null,
@@ -84,7 +87,10 @@
             success: (data) => {
 
                 /**加载饼图**/
-                 Highcharts.chart('YearPie', {
+                Highcharts.chart('YearPie', {
+                    lang: {
+                        noData: '暂无数据'
+                    },
                     chart: {
                         plotBackgroundColor: null,
                         plotBorderWidth: null,
@@ -130,6 +136,9 @@
             type: "POST",
             success: (data) => {
                 Highcharts.chart('column', {
+                    lang: {
+                        noData: '暂无数据'
+                    },
                     chart: {
                         type: 'column'
                     },
@@ -169,6 +178,9 @@
                 });
 
                 var chart = Highcharts.chart('line', {
+                    lang: {
+                        noData: '暂无数据'
+                    },
                     chart: {
                         type: 'line'
                     },
@@ -215,6 +227,9 @@
             success: (data) => {
 
                 var chart = Highcharts.chart('monthLine', {
+                    lang: {
+                        noData: '暂无数据'
+                    },
                     chart: {
                         type: 'line'
                     },

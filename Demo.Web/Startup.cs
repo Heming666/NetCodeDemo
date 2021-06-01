@@ -23,6 +23,7 @@ using Demo.Web.Handler;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Demo.Web
 {
@@ -55,6 +56,15 @@ namespace Demo.Web
             services.AddControllersWithViews();
             services.AddSession();
             services.AddMemoryCache();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    var cookiePolicyOptions = new CookiePolicyOptions
+                    {
+                        //默认 MinimumSameSitePolicy 值为 SameSiteMode.Lax 允许 OAuth2 authentication。 若要严格地强制执行同一站点策略 设置 MinimumSameSitePolic=SameSiteMode.Strict
+                        MinimumSameSitePolicy = SameSiteMode.Strict,
+                    };
+                });
             services.Configure<IISServerOptions>(options =>
            {
                options.AllowSynchronousIO = true;

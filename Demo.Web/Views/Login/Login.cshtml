@@ -11,8 +11,7 @@
         <label class="checkbox input-block-level">
             <input type="checkbox" name="IsRememberMe" value="remember-me"> 记住密码
         </label>
-        <br />
-        <span style="color:red;"> @Html.ValidationMessage("Error")</span>
+        <span style="color:red;" class="input-block-level"> @Html.ValidationMessage("Error")</span>
         <br />
         <button class="btn btn-large btn-primary" ; type="submit">登录</button>
         <a asp-action="Register">注册</a>

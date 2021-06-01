@@ -21,6 +21,11 @@ namespace Business.Service.Base
             return AnyAsync(p => p.UserName == account);
         }
 
+        public async Task<UserEntity> GetEntity(Expression<Func<UserEntity, bool>> expression)
+        {
+            return await FirstOrDefaultAsnyc(expression);
+        }
+
         public async Task<List<UserEntity>> GetList(Expression<Func<UserEntity, bool>> expression)
         {
             return await Where(expression).ToListAsync();
