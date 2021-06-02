@@ -24,6 +24,9 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Demo.Web
 {
@@ -51,26 +54,6 @@ namespace Demo.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDataProtection();//开启Windows DPAPI 自动加密
-            services.AddResponseCompression();
-            services.AddControllersWithViews();
-            services.AddSession();
-            services.AddMemoryCache();
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    var cookiePolicyOptions = new CookiePolicyOptions
-                    {
-                        //默认 MinimumSameSitePolicy 值为 SameSiteMode.Lax 允许 OAuth2 authentication。 若要严格地强制执行同一站点策略 设置 MinimumSameSitePolic=SameSiteMode.Strict
-                        MinimumSameSitePolicy = SameSiteMode.Strict,
-                    };
-                });
-            services.Configure<IISServerOptions>(options =>
-           {
-               options.AllowSynchronousIO = true;
-           });
-            services.AddDirectoryBrowser();//启动目录浏览
-
             services.AddScoped<DbContext, MySqlDBContext>();
             //注入mysqlDbcontext
             services.AddDbContext<MySqlDBContext>(option =>
@@ -101,12 +84,60 @@ namespace Demo.Web
 
             //        });
             //});
+            services.AddDataProtection();//开启Windows DPAPI 自动加密  --用于对称加密
+            services.AddResponseCompression();
+            services.AddControllersWithViews().AddRazorPagesOptions(options =>
+        {
+            options.Conventions.AuthorizePage("/Login/Login");
+        });
+            services.AddSession();
+            services.AddMemoryCache();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    var cookiePolicyOptions = new CookiePolicyOptions
+                    {
+                        //默认 MinimumSameSitePolicy 值为 SameSiteMode.Lax 允许 OAuth2 authentication。 若要严格地强制执行同一站点策略 设置 MinimumSameSitePolic=SameSiteMode.Strict
+                        MinimumSameSitePolicy = SameSiteMode.Strict,
+                    };
+                });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministratorRole",
+             policy => policy.Requirements.Add(new PermissionRequirement(
+                "/Home/visitDeny",// 拒绝授权的跳转地址
+                ClaimTypes.Name,//基于用户名的授权
+                expiration: TimeSpan.FromSeconds(60 * 5)//接口的过期时间
+                )));
+            });
+            // 注入权限处理器
+            services.AddTransient<IAuthorizationHandler, OwnerAuthorizationHandler>();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/Account/AccessDenied";//无权限访问后 跳转的地址
+                options.Cookie.Name = "YourAppCookieName";
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromDays(30);
+                options.LoginPath =  "/Account/Login";
+                // ReturnUrlParameter requires 
+                //using Microsoft.AspNetCore.Authentication.Cookies;
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+                options.SlidingExpiration = true;
+            });
+
+
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
+            services.AddDirectoryBrowser();//启动目录浏览
+
+
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();//注册数据工厂
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IComsumeService, ComsumeService>();
         }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IAntiforgery antiforgery)
         {
@@ -133,11 +164,11 @@ namespace Demo.Web
             //    }
             //    return next(context);
             //});
-
             app.UseCookiePolicy();
             app.UseRequestLocalization();
             app.UseCors();
             app.UseAuthentication();
+
             app.UseSession();
             app.UseResponseCompression();//响应压缩， 必须注册中间件services.AddResponseCompression();
             app.UseResponseCaching();

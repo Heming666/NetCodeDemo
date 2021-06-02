@@ -1,10 +1,12 @@
 ﻿using Business.IService.Customer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using Util.Log;
 
 namespace Demo.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly NLog.Logger logger;
         private readonly IComsumeService _customer;
@@ -14,9 +16,11 @@ namespace Demo.Web.Controllers
             logger = NLog.LogManager.GetCurrentClassLogger();
             _customer = comsumeService;
         }
+        [Authorize(Roles = "系统管理员, 管理人员")]
         public IActionResult Index()
         {
-            logger.Info(111);
+            
+            logger.Info(User);
             return View();
         }
     }

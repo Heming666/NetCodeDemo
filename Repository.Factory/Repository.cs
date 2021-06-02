@@ -13,7 +13,7 @@ namespace Repository.Factory
     public class Repository<T>  where T : class, new()
     {
         private DbContext _dbContext;
-        private readonly DbSet<T> _dbSet;
+        public readonly DbSet<T> dbSet;
         private readonly string _connStr;
         public Repository()
         {
@@ -21,7 +21,7 @@ namespace Repository.Factory
         public Repository(DbContext mydbcontext)
         {
             this._dbContext = mydbcontext;
-            this._dbSet = _dbContext.Set<T>();
+            this.dbSet = _dbContext.Set<T>();
             this._connStr = _dbContext.Database.GetDbConnection().ConnectionString;
         }
 
@@ -66,17 +66,17 @@ namespace Repository.Factory
 
         public IQueryable<T> Entities
         {
-            get { return this._dbSet.AsNoTracking(); }
+            get { return this.dbSet.AsNoTracking(); }
         }
 
         public IQueryable<T> TrackEntities
         {
-            get { return this._dbSet; }
+            get { return this.dbSet; }
         }
 
         public async  Task<T> InsertAsync(T entity, bool isSave = true)
         {
-            await this._dbSet.AddAsync(entity);
+            await this.dbSet.AddAsync(entity);
             if (isSave)
             {
                 this.SaveChanges();
@@ -85,13 +85,13 @@ namespace Repository.Factory
         }
         public async  Task<int> InsertAsync(T entity)
         {
-            await this._dbSet.AddAsync(entity);
+            await this.dbSet.AddAsync(entity);
             return this.SaveChanges();
              
         }
         public void AddRange(IEnumerable<T> entitys, bool isSave = true)
         {
-            this._dbSet.AddRange(entitys);
+            this.dbSet.AddRange(entitys);
             if (isSave)
             {
                 this.SaveChanges();
@@ -100,7 +100,7 @@ namespace Repository.Factory
 
         public void Delete(T entity, bool isSave = true)
         {
-            this._dbSet.Remove(entity);
+            this.dbSet.Remove(entity);
             if (isSave)
             {
                 this.SaveChanges();
@@ -109,7 +109,7 @@ namespace Repository.Factory
 
         public void Delete(bool isSave = true, params T[] entitys)
         {
-            this._dbSet.RemoveRange(entitys);
+            this.dbSet.RemoveRange(entitys);
             if (isSave)
             {
                 this.SaveChanges();
@@ -118,7 +118,7 @@ namespace Repository.Factory
 
         public void Delete(object id, bool isSave = true)
         {
-            this._dbSet.Remove(this._dbSet.Find(id));
+            this.dbSet.Remove(this.dbSet.Find(id));
             if (isSave)
             {
                 this.SaveChanges();
@@ -127,10 +127,10 @@ namespace Repository.Factory
 
         public void Delete(Expression<Func<T, bool>> @where, bool isSave = true)
         {
-            T[] entitys = this._dbSet.Where<T>(@where).ToArray();
+            T[] entitys = this.dbSet.Where<T>(@where).ToArray();
             if (entitys.Length > 0)
             {
-                this._dbSet.RemoveRange(entitys);
+                this.dbSet.RemoveRange(entitys);
             }
             if (isSave)
             {
@@ -166,65 +166,65 @@ namespace Repository.Factory
 
         public bool Any(Expression<Func<T, bool>> @where)
         {
-            return this._dbSet.AsNoTracking().Any(@where);
+            return this.dbSet.AsNoTracking().Any(@where);
         }
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> @where)
         {
-            return await this._dbSet.AsNoTracking().AnyAsync(@where);
+            return await this.dbSet.AsNoTracking().AnyAsync(@where);
         }
         public int Count()
         {
-            return this._dbSet.AsNoTracking().Count();
+            return this.dbSet.AsNoTracking().Count();
         }
 
         public int Count(Expression<Func<T, bool>> @where)
         {
-            return this._dbSet.AsNoTracking().Count(@where);
+            return this.dbSet.AsNoTracking().Count(@where);
         }
 
         public T FirstOrDefault(Expression<Func<T, bool>> @where)
         {
-            return this._dbSet.AsNoTracking().FirstOrDefault(@where);
+            return this.dbSet.AsNoTracking().FirstOrDefault(@where);
         }
         public async Task<T> FirstOrDefaultAsnyc(Expression<Func<T, bool>> @where)
         {
-            return await this._dbSet.AsNoTracking().FirstOrDefaultAsync(@where);
+            return await this.dbSet.AsNoTracking().FirstOrDefaultAsync(@where);
         }
         public T FirstOrDefault<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, bool isDesc = false)
         {
             if (isDesc)
             {
-                return this._dbSet.AsNoTracking().OrderByDescending(order).FirstOrDefault(@where);
+                return this.dbSet.AsNoTracking().OrderByDescending(order).FirstOrDefault(@where);
             }
             else
             {
-                return this._dbSet.AsNoTracking().OrderBy(order).FirstOrDefault(@where);
+                return this.dbSet.AsNoTracking().OrderBy(order).FirstOrDefault(@where);
             }
         }
 
         public IQueryable<T> Distinct(Expression<Func<T, bool>> @where)
         {
-            return this._dbSet.AsNoTracking().Where(@where).Distinct();
+            return this.dbSet.AsNoTracking().Where(@where).Distinct();
         }
 
         public IQueryable<T> Where(Expression<Func<T, bool>> @where)
         {
-            return this._dbSet.Where(@where);
+            return this.dbSet.Where(@where);
         }
         public IQueryable<T> Where()
         {
-            return this._dbSet.AsQueryable();
+            return this.dbSet.AsQueryable();
         }
 
         public IQueryable<T> Where<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, bool isDesc = false)
         {
             if (isDesc)
             {
-                return this._dbSet.Where(@where).OrderByDescending(order);
+                return this.dbSet.Where(@where).OrderByDescending(order);
             }
             else
             {
-                return this._dbSet.Where(@where).OrderBy(order);
+                return this.dbSet.Where(@where).OrderBy(order);
             }
         }
 
@@ -233,11 +233,11 @@ namespace Repository.Factory
             count = Count();
             if (isDesc)
             {
-                return this._dbSet.Where(@where).OrderByDescending(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+                return this.dbSet.Where(@where).OrderByDescending(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
             }
             else
             {
-                return this._dbSet.Where(@where).OrderBy(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+                return this.dbSet.Where(@where).OrderBy(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
             }
         }
 
@@ -246,68 +246,68 @@ namespace Repository.Factory
             count = Count();
             if (isDesc)
             {
-                return this._dbSet.Where(@where).OrderByDescending(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+                return this.dbSet.Where(@where).OrderByDescending(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
             }
             else
             {
-                return this._dbSet.Where(@where).OrderBy(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+                return this.dbSet.Where(@where).OrderBy(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
             }
         }
 
         public IQueryable<T> GetAll()
         {
-            return this._dbSet.AsNoTracking();
+            return this.dbSet.AsNoTracking();
         }
 
         public IQueryable<T> GetAll<TOrder>(Expression<Func<T, TOrder>> order, bool isDesc = false)
         {
             if (isDesc)
             {
-                return this._dbSet.AsNoTracking().OrderByDescending(order);
+                return this.dbSet.AsNoTracking().OrderByDescending(order);
             }
             else
             {
-                return this._dbSet.AsNoTracking().OrderBy(order);
+                return this.dbSet.AsNoTracking().OrderBy(order);
             }
         }
 
         public T GetById<Ttype>(Ttype id)
         {
-            return this._dbSet.Find(id);
+            return this.dbSet.Find(id);
         }
 
         public Ttype Max<Ttype>(Expression<Func<T, Ttype>> column)
         {
-            if (this._dbSet.AsNoTracking().Any())
+            if (this.dbSet.AsNoTracking().Any())
             {
-                return this._dbSet.AsNoTracking().Max<T, Ttype>(column);
+                return this.dbSet.AsNoTracking().Max<T, Ttype>(column);
             }
             return default(Ttype);
         }
 
         public Ttype Max<Ttype>(Expression<Func<T, Ttype>> column, Expression<Func<T, bool>> @where)
         {
-            if (this._dbSet.AsNoTracking().Any(@where))
+            if (this.dbSet.AsNoTracking().Any(@where))
             {
-                return this._dbSet.AsNoTracking().Where(@where).Max<T, Ttype>(column);
+                return this.dbSet.AsNoTracking().Where(@where).Max<T, Ttype>(column);
             }
             return default(Ttype);
         }
 
         public Ttype Min<Ttype>(Expression<Func<T, Ttype>> column)
         {
-            if (this._dbSet.AsNoTracking().Any())
+            if (this.dbSet.AsNoTracking().Any())
             {
-                return this._dbSet.AsNoTracking().Min<T, Ttype>(column);
+                return this.dbSet.AsNoTracking().Min<T, Ttype>(column);
             }
             return default(Ttype);
         }
 
         public Ttype Min<Ttype>(Expression<Func<T, Ttype>> column, Expression<Func<T, bool>> @where)
         {
-            if (this._dbSet.AsNoTracking().Any(@where))
+            if (this.dbSet.AsNoTracking().Any(@where))
             {
-                return this._dbSet.AsNoTracking().Where(@where).Min<T, Ttype>(column);
+                return this.dbSet.AsNoTracking().Where(@where).Min<T, Ttype>(column);
             }
             return default(Ttype);
         }
@@ -318,43 +318,43 @@ namespace Repository.Factory
 
             if (new TType().GetType() == typeof(decimal))
             {
-                result = this._dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, decimal>>);
+                result = this.dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, decimal>>);
             }
             if (new TType().GetType() == typeof(decimal?))
             {
-                result = this._dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, decimal?>>);
+                result = this.dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, decimal?>>);
             }
             if (new TType().GetType() == typeof(double))
             {
-                result = this._dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, double>>);
+                result = this.dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, double>>);
             }
             if (new TType().GetType() == typeof(double?))
             {
-                result = this._dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, double?>>);
+                result = this.dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, double?>>);
             }
             if (new TType().GetType() == typeof(float))
             {
-                result = this._dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, float>>);
+                result = this.dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, float>>);
             }
             if (new TType().GetType() == typeof(float?))
             {
-                result = this._dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, float?>>);
+                result = this.dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, float?>>);
             }
             if (new TType().GetType() == typeof(int))
             {
-                result = this._dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, int>>);
+                result = this.dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, int>>);
             }
             if (new TType().GetType() == typeof(int?))
             {
-                result = this._dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, int?>>);
+                result = this.dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, int?>>);
             }
             if (new TType().GetType() == typeof(long))
             {
-                result = this._dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, long>>);
+                result = this.dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, long>>);
             }
             if (new TType().GetType() == typeof(long?))
             {
-                result = this._dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, long?>>);
+                result = this.dbSet.AsNoTracking().Where(where).Sum(selector as Expression<Func<T, long?>>);
             }
             return (TType)result;
         }

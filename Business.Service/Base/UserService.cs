@@ -23,7 +23,7 @@ namespace Business.Service.Base
 
         public async Task<UserEntity> GetEntity(Expression<Func<UserEntity, bool>> expression)
         {
-            return await FirstOrDefaultAsnyc(expression);
+            return await dbSet.Include(x => x.DeptInfo).AsNoTracking().FirstOrDefaultAsync(expression);
         }
 
         public async Task<List<UserEntity>> GetList(Expression<Func<UserEntity, bool>> expression)

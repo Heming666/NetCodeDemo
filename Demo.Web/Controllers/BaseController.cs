@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using Util.Log;
 
 namespace Demo.Web.Controllers
 {
+    [Authorize]
     public class BaseController : Controller
     {
         public BaseController()

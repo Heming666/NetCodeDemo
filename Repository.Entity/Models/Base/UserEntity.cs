@@ -27,6 +27,7 @@ namespace Repository.Entity.Models.Base
         /// </summary>
         [Remote(action: "VerifyAccount", controller: "Login", AdditionalFields = nameof(Account))]
         [Required(ErrorMessage ="账号不能为空"),MinLength(2,ErrorMessage ="账号的最小长度不能少于2"),MaxLength(24), Comment("账户"), Display(Name = "账号")]
+        [RegularExpression("^\\w{2,24}$", ErrorMessage = "2至24位数字、字母或者下划线")]
         //[ConcurrencyCheck]并发标记
         public string  Account { get; set; }
 
@@ -34,6 +35,7 @@ namespace Repository.Entity.Models.Base
         /// 密码
         /// </summary>
         [Required(ErrorMessage = "密码不能为空"), MinLength(2, ErrorMessage = "密码的最小长度不能少于2"), MaxLength(24), Comment("密码"),DataType(DataType.Password), Display(Name = "密码")]
+        [RegularExpression("^[a-zA-Z]\\w{2,24}$", ErrorMessage = "2至24位以字母开头，包含数字、字母或者下划线")]
         public string  PassWord { get; set; }
 
         /// <summary>

@@ -22,6 +22,7 @@ namespace Demo.Web.Areas.Base.Controllers
         public UserController(IUserService userService,
                               IDepartmentService departmentService)
         {
+            logger = NLog.LogManager.GetCurrentClassLogger();
             this._userService = userService;
             this._deptService = departmentService;
         }

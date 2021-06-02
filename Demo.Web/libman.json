@@ -12,8 +12,7 @@
       "destination": "wwwroot/lib/highcharts/",
       "files": [
         "highcharts.js",
-        "css/highcharts.min.css",
-        "highcharts.min.js"
+        "modules/no-data-to-display.min.js"
       ]
     }
   ]

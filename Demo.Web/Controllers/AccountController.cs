@@ -14,11 +14,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Util.Encrypt;
+using Util.Extension;
 using Util.Log;
 
 namespace Demo.Web.Controllers
 {
-    public class LoginController : BaseController
+    public class AccountController : Controller
     {
         private readonly IUserService _userService;
         private readonly IDepartmentService _deptService;
@@ -27,7 +28,7 @@ namespace Demo.Web.Controllers
         /// 数据加密
         /// </summary>
         private readonly IDataProtector _protector;
-        public LoginController( IUserService userService, IDepartmentService deptService, IDataProtectionProvider protector, IWebHostEnvironment hosting) 
+        public AccountController( IUserService userService, IDepartmentService deptService, IDataProtectionProvider protector, IWebHostEnvironment hosting) 
         {
             string key = "PublicKey";//key为加密公钥，私钥为系统自动维护    
             _protector = protector.CreateProtector(key);
@@ -51,50 +52,61 @@ namespace Demo.Web.Controllers
         [HttpPost, AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Login(IFormCollection forms)
         {
-            string account = forms["Account"], password = forms["PassWord"], isRemember = forms["IsRememberMe"];
-            UserEntity user = await _userService.GetEntity(p => p.Account == account);
-            if (isRemember.Equals("remember-me"))
+            try
             {
-                //记住密码
-                var claims = new List<Claim>
+                string account = forms["Account"], password = forms["PassWord"], isRemember = forms["IsRememberMe"];
+                UserEntity user = await _userService.GetEntity(p => p.Account == account);
+                if (user is null) throw new Exception("账号或密码错误");
+                if (!user.PassWord.Equals(MD5Encrypt.MD5Encrypt16(password))) throw new Exception("账号或密码错误");
+
+               
+                    //记住密码
+                    var claims = new List<Claim>
                                     {
                                         new Claim(ClaimTypes.Name, account),
-                                        new Claim("FullName", user.UserName),
-                                        new Claim(ClaimTypes.Role, "Administrator"),
+                                        new Claim("UserName", user.UserName),
+                                        new Claim(ClaimTypes.Role, user.DeptInfo.DeptName),
                                     };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                var authProperties = new AuthenticationProperties
+                    var authProperties = new AuthenticationProperties
+                    {
+                        // Whether the authentication session is persisted across 
+                        // multiple requests. When used with cookies, controls
+                        // whether the cookie's lifetime is absolute (matching the
+                        // lifetime of the authentication ticket) or session-based.
+                        IsPersistent = true,
+
+                        // The time at which the authentication ticket expires. A 
+                        // value set here overrides the ExpireTimeSpan option of 
+                        // CookieAuthenticationOptions set with AddCookie.
+                        ExpiresUtc = DateTime.UtcNow.AddMinutes(30),
+
+                        // Refreshing the authentication session should be allowed.
+                        AllowRefresh = true,
+
+
+
+
+                        // The time at which the authentication ticket was issued.
+                        //IssuedUtc = <DateTimeOffset>,
+
+
+                        RedirectUri = Url.Action(nameof(Login))   // The full path or absolute URI to be used as an http  // redirect response value.
+                    };
+                if (!isRemember.IsEmpty() && isRemember.Equals("remember-me"))
                 {
-                    // Whether the authentication session is persisted across 
-                    // multiple requests. When used with cookies, controls
-                    // whether the cookie's lifetime is absolute (matching the
-                    // lifetime of the authentication ticket) or session-based.
-                    IsPersistent = true,
-
-                    // The time at which the authentication ticket expires. A 
-                    // value set here overrides the ExpireTimeSpan option of 
-                    // CookieAuthenticationOptions set with AddCookie.
-                    ExpiresUtc = DateTime.UtcNow.AddDays(30),
-
-                    // Refreshing the authentication session should be allowed.
-                    AllowRefresh = true,
-
-
-
-
-                    // The time at which the authentication ticket was issued.
-                    //IssuedUtc = <DateTimeOffset>,
-
-
-                    RedirectUri = Url.Action(nameof(Login))   // The full path or absolute URI to be used as an http  // redirect response value.
-                };
+                    authProperties.ExpiresUtc = DateTime.UtcNow.AddDays(30);
+                }
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                return RedirectToAction("Index", "Home");
             }
-
-            ModelState.AddModelError("Error", "测试测试测试测试测试测试");
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error", ex.Message);
+            }
             return View();
         }
 

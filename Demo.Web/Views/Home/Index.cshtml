@@ -11,6 +11,7 @@
 @section scripts
 {
     <script src="~/lib/highcharts/highcharts.js"></script>
+    <script src="~/lib/highcharts/modules/no-data-to-display.min.js"></script>
 }
 @section styles
 {
@@ -31,17 +32,27 @@
             data: { month: month },
             type: "POST",
             success: (data) => {
-                if (!!data && data.length == 0) {
-                    Highcharts.setOptions({
-                        lang: {
-                            noData: '暂无数据'
-                        }
-                    });
-                }
                 /**加载饼图**/
                 Highcharts.chart('pie', {
                     lang: {
                         noData: '暂无数据'
+                    }, noData: {
+                        // Custom positioning/aligning options
+                        position: {    //相对于绘图区定位无数据标签的位置。 默认值：[object Object].
+                            //align: 'right',
+                            //verticalAlign: 'bottom'
+                        },
+                        // Custom svg attributes
+                        attr: {     //无数据标签中额外的SVG属性
+                            //'stroke-width': 1,
+                            //stroke: '#cccccc'
+                        },
+                        // Custom css
+                        style: {    //对无数据标签的CSS样式。 默认值：[object Object].
+                            //fontWeight: 'bold',
+                            //fontSize: '15px',
+                            //color: '#202030'
+                        }
                     },
                     chart: {
                         plotBackgroundColor: null,
