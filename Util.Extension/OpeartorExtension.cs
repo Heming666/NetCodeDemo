@@ -12,5 +12,9 @@ namespace Util.Extension
         {
             return string.IsNullOrWhiteSpace(value);
         }
+        public static bool HasValue(this string value)
+        {
+            return !string.IsNullOrWhiteSpace(value);
+        }
     }
 }

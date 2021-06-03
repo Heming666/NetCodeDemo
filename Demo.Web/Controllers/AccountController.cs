@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 using Repository.Entity.Models.Base;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,25 @@ namespace Demo.Web.Controllers
         /// <returns></returns>
         public IActionResult Login()
         {
+            string username = string.Empty, password = string.Empty;
+            var cookieValue = HttpContext.Request.Cookies["User_Account"];
+            if (!cookieValue.IsEmpty())
+            {
+                try
+                {
+                    dynamic UserInfo = JsonConvert.DeserializeAnonymousType(_protector.Unprotect(cookieValue), new { Account = string.Empty, PassWord = string.Empty });
+                    username = UserInfo.Account;
+                    password = UserInfo.PassWord;
+                    //此处可以不经过登录，直接进入平台
+                }
+                catch (Exception)
+                {
+                    //大概率是DPAPI 私钥过期  
+                }
+
+            }
+            ViewBag.Account = username;
+            ViewBag.PassWord = password;
             return View();
         }
 
@@ -57,7 +77,7 @@ namespace Demo.Web.Controllers
                 string account = forms["Account"], password = forms["PassWord"], isRemember = forms["IsRememberMe"];
                 UserEntity user = await _userService.GetEntity(p => p.Account == account);
                 if (user is null) throw new Exception("账号或密码错误");
-                if (!user.PassWord.Equals(MD5Encrypt.MD5Encrypt16(password))) throw new Exception("账号或密码错误");
+                if (!(user.PassWord.Equals(password) || user.PassWord.Equals(MD5Encrypt.MD5Encrypt16(password)))) throw new Exception("账号或密码错误");
 
                
                     //记住密码
@@ -95,12 +115,15 @@ namespace Demo.Web.Controllers
 
                         RedirectUri = Url.Action(nameof(Login))   // The full path or absolute URI to be used as an http  // redirect response value.
                     };
-                if (!isRemember.IsEmpty() && isRemember.Equals("remember-me"))
-                {
-                    authProperties.ExpiresUtc = DateTime.UtcNow.AddDays(30);
-                }
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                if (!isRemember.IsEmpty() && isRemember.Equals("remember-me"))
+                {
+                    //采用对称加密，对用户信息进行加密.。写入cookie
+                    string cookieValue = JsonConvert.SerializeObject(new { user.Account,user.PassWord});
+                    string encyptString = _protector.Protect(cookieValue);
+                    HttpContext.Response.Cookies.Append("User_Account", encyptString, new CookieOptions() { Expires = DateTimeOffset.UtcNow.AddDays(30) });
+                }
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
@@ -142,10 +165,6 @@ namespace Demo.Web.Controllers
                     }
                     user.Photo = "src/Photo/" + newfileName;
                 }
-                var a = _protector.Protect("1");
-                Console.WriteLine(a);
-                var b = _protector.Unprotect(a);
-                Console.WriteLine(b);
                 user.PassWord = MD5Encrypt.MD5Encrypt16(user.PassWord);
                 bool isOK = await _userService.Register(user) >0;
                 return RedirectToAction(nameof(Login));
