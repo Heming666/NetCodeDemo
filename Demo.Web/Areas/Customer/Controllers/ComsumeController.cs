@@ -61,9 +61,9 @@ namespace Demo.Web.Areas.Customer.Controllers
         }
 
         // GET: ComsumeController/Create
-        public ActionResult Create(int UserId)
+        public ActionResult Create()
         {
-            return View(new ConsumeEntity() { UserId = UserId,LogTime=DateTime.Now,CreateTime=DateTime.Now });
+            return View(new ConsumeEntity() { LogTime=DateTime.Now,CreateTime=DateTime.Now });
         }
 
         // POST: ComsumeController/Create
@@ -73,14 +73,24 @@ namespace Demo.Web.Areas.Customer.Controllers
         {
             try
             {
-                _customer.Add(entity);
-                return RedirectToAction(nameof(Index), new { UserId = CurrentUser().UserId });
+                entity.UserId = CurrentUser().UserId;
+                entity.CreateTime = DateTime.Now;
+                var success = _customer.Add(entity).Result > 0;
+                if (success)
+                {
+                    return RedirectToAction(nameof(Index), new { UserId = CurrentUser().UserId });
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "添加失败");
+                }
             }
             catch(Exception ex)
             {
                 logger.Error(ex);
-                return View();
+                ModelState.AddModelError("Error", ex.Message);
             }
+            return View(entity);
         }
 
         // GET: ComsumeController/Edit/5

@@ -26,7 +26,7 @@ namespace Business.Service.Customer
 
         public  async Task< List<ConsumeEntity>> GetListAsync(Expression<Func<ConsumeEntity, bool>> expression)
         {
-            return await Where(expression).OrderBy(x => x.LogTime).ToListAsync();
+            return await Where(expression).OrderByDescending(x => x.LogTime).ToListAsync();
         }
 
         public async Task<List<ChartsColumnModel>> LoadColumn(Expression<Func<ConsumeEntity, bool>> expression)

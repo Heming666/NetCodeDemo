@@ -58,11 +58,14 @@ namespace Repository.Factory
             }
         }
 
+        public async Task<int> SaveChangesAsync()
+        {
+            return await this._dbContext.SaveChangesAsync();
+        }
         public int SaveChanges()
         {
-            return this._dbContext.SaveChanges();
+            return  this._dbContext.SaveChanges();
         }
-
 
         public IQueryable<T> Entities
         {
@@ -86,7 +89,7 @@ namespace Repository.Factory
         public async  Task<int> InsertAsync(T entity)
         {
             await this.dbSet.AddAsync(entity);
-            return this.SaveChanges();
+            return await this.SaveChangesAsync();
              
         }
         public void AddRange(IEnumerable<T> entitys, bool isSave = true)
