@@ -7,6 +7,7 @@ using Repository.Entity.ViewModels.Index;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Util.Extension;
 using Util.Log;
@@ -30,12 +31,12 @@ namespace Demo.Web.Areas.Customer.Controllers
      /// <param name="classify"></param>
      /// <param name="UserId"></param>
      /// <returns></returns>
-        public async Task<IActionResult> Index(int? classify=null, int UserId=1)
+        public async Task<IActionResult> Index(int? classify=null)
         {
-            var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == UserId);
+        
+            var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == CurrentUser().UserId);
             if (classify.HasValue) where = where.And(x => x.Classify == (Classify)classify.Value);
             var datas =await _customer.GetListAsync(where);
-            ViewBag.UserId = UserId;
             return View(datas);
         }
         /// <summary>
@@ -45,12 +46,11 @@ namespace Demo.Web.Areas.Customer.Controllers
         /// <param name="UserId"></param>
         /// <returns></returns>
         [Route("Index"),HttpPost,ValidateAntiForgeryToken]
-        public async  Task<IActionResult> IndexPost(int? classify = null, int UserId = 1)
+        public async  Task<IActionResult> IndexPost(int? classify = null)
         {
-            var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == UserId);
+            var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == CurrentUser().UserId);
             if (classify.HasValue) where = where.And(x => x.Classify == (Classify)classify.Value);
             var datas =await _customer.GetListAsync(where);
-            ViewBag.UserId = UserId;
             return View(nameof(Index),datas);
         }
 
@@ -61,9 +61,9 @@ namespace Demo.Web.Areas.Customer.Controllers
         }
 
         // GET: ComsumeController/Create
-        public ActionResult Create(int UserId)
+        public ActionResult Create()
         {
-            return View(new ConsumeEntity() { UserId = UserId,LogTime=DateTime.Now,CreateTime=DateTime.Now });
+            return View(new ConsumeEntity() { LogTime=DateTime.Now,CreateTime=DateTime.Now });
         }
 
         // POST: ComsumeController/Create
@@ -73,14 +73,24 @@ namespace Demo.Web.Areas.Customer.Controllers
         {
             try
             {
-                _customer.Add(entity);
-                return RedirectToAction(nameof(Index), new { UserId = entity.UserId });
+                entity.UserId = CurrentUser().UserId;
+                entity.CreateTime = DateTime.Now;
+                var success = _customer.Add(entity).Result > 0;
+                if (success)
+                {
+                    return RedirectToAction(nameof(Index), new { UserId = CurrentUser().UserId });
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "添加失败");
+                }
             }
             catch(Exception ex)
             {
                 logger.Error(ex);
-                return View();
+                ModelState.AddModelError("Error", ex.Message);
             }
+            return View(entity);
         }
 
         // GET: ComsumeController/Edit/5
@@ -130,27 +140,27 @@ namespace Demo.Web.Areas.Customer.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> LoadPie(int month)
         {
-            List<ChartsPieModel> data = await _customer.LoadPie(x => x.LogTime.Month == month && x.UserId.Equals(1));
+            List<ChartsPieModel> data = await _customer.LoadPie(x => x.LogTime.Month == month && x.UserId.Equals(CurrentUser().UserId));
             return Json(data);
         }
         [HttpPost]
         public async Task<IActionResult> LoadYearPie()
         {
             int year = DateTime.Now.Year;
-            List<ChartsPieModel> data = await _customer.LoadPie(x => x.LogTime.Year == year && x.UserId.Equals(1));
+            List<ChartsPieModel> data = await _customer.LoadPie(x => x.LogTime.Year == year && x.UserId.Equals(CurrentUser().UserId));
             return Json(data);
         }
         [HttpPost]
         public async Task<IActionResult> LoadColumn(int year)
         {
-            List<ChartsColumnModel> data = await _customer.LoadColumn(x => x.LogTime.Year == year && x.UserId.Equals(1));
+            List<ChartsColumnModel> data = await _customer.LoadColumn(x => x.LogTime.Year == year && x.UserId.Equals(CurrentUser().UserId));
             return Json(data);
         }
 
         [HttpPost]
         public async Task<IActionResult> LoadMonthColumn(int month)
         {
-            List<ChartsColumnModel> data = await _customer.LoadMonthColumn(x => x.LogTime.Month == month && x.UserId.Equals(1));
+            List<ChartsColumnModel> data = await _customer.LoadMonthColumn(x => x.LogTime.Month == month && x.UserId.Equals(CurrentUser().UserId));
             List<int> days = new List<int>();
             int day = System.Threading.Thread.CurrentThread.CurrentUICulture.Calendar.GetDaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
             while (day >=1)

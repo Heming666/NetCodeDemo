@@ -16,5 +16,10 @@ namespace Util.Extension
         {
             return !string.IsNullOrWhiteSpace(value);
         }
+
+        public static int ToInt(this string value)
+        {
+            return Convert.ToInt32(value);
+        }
     }
 }
