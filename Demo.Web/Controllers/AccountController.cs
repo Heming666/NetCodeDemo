@@ -28,11 +28,11 @@ namespace Demo.Web.Controllers
         /// <summary>
         /// 数据加密
         /// </summary>
-        private readonly ITimeLimitedDataProtector _protector;
+        private readonly IDataProtector _protector;
         public AccountController( IUserService userService, IDepartmentService deptService, IDataProtectionProvider protector, IWebHostEnvironment hosting) 
         {
             string key = "PublicKey";//key为加密公钥，私钥为系统自动维护    
-            _protector = protector.CreateProtector(key).ToTimeLimitedDataProtector();
+            _protector = protector.CreateProtector(key);
             _userService = userService;
             _deptService = deptService;
             _hosting = hosting;
@@ -54,7 +54,7 @@ namespace Demo.Web.Controllers
                     password = UserInfo.PassWord;
                     //此处可以不经过登录，直接进入平台
                 }
-                catch (Exception)
+                catch (System.Security.Cryptography.CryptographicException ex)
                 {
                     //大概率是DPAPI 私钥过期  
                 }
@@ -124,8 +124,8 @@ namespace Demo.Web.Controllers
                 {
                     //采用对称加密，对用户信息进行加密.。写入cookie
                     string cookieValue = JsonConvert.SerializeObject(new { user.Account,user.PassWord});
-                    string encyptString = _protector.Protect(cookieValue,DateTimeOffset.Now.AddDays(30));
-                    HttpContext.Response.Cookies.Append("User_Account", encyptString, new CookieOptions() { Expires = DateTimeOffset.UtcNow.AddDays(30) });
+                    string encyptString = _protector.Protect(cookieValue);//加密
+                    HttpContext.Response.Cookies.Append("User_Account", encyptString, new CookieOptions() { Expires = DateTimeOffset.UtcNow.AddDays(30),  });
                 }
              
                 return RedirectToAction("Index", "Home");
@@ -195,6 +195,12 @@ namespace Demo.Web.Controllers
                 return Json($"账号已存在");
             }
             return Json(true);
+        }
+
+        public async Task<IActionResult> LoginOutAsync()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction(nameof(Login));
         }
     }
 }

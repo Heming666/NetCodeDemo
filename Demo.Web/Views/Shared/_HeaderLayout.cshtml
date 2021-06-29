@@ -1,4 +1,5 @@
-﻿ @{
+﻿@using System.Security.Claims
+ @{
     var action = Context.Request.RouteValues["action"].ToString().ToLower() ;
     var controller = Context.Request.RouteValues["controller"].ToString().ToLower();
     var area = Context.Request.RouteValues["area"]?.ToString().ToLower();
@@ -23,7 +24,7 @@
                 <ul class="nav pull-right">
                     <li class="dropdown">
                         <a asp-action="index" asp-controller="Home" role="button" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-user"></i>管理员<i class="caret"></i>
+                            <i class="icon-user"></i>@User.FindFirst(ClaimTypes.Name).Value<i class="caret"></i>
 
                         </a>
                         <ul class="dropdown-menu">
@@ -33,7 +34,7 @@
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a tabindex="-1" href="login.html">退出</a>
+                                <a tabindex="-1" asp-action="LoginOut" asp-controller="Account">退出</a>
                             </li>
                         </ul>
                     </li>

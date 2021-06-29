@@ -19,8 +19,6 @@ namespace Demo.Web.Controllers
         [Authorize(Roles = "系统管理员, 管理人员")]
         public IActionResult Index()
         {
-            
-            logger.Info(User);
             return View();
         }
     }

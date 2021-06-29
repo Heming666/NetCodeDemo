@@ -1,4 +1,5 @@
 ﻿using Business.IService.Customer;
+using Demo.Web.Areas.Customer.Data;
 using Demo.Web.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,28 +32,27 @@ namespace Demo.Web.Areas.Customer.Controllers
      /// <param name="classify"></param>
      /// <param name="UserId"></param>
      /// <returns></returns>
-        public async Task<IActionResult> Index(int? classify=null)
+        public async Task<IActionResult> Index(string title , Classify? classify,DateTime? startDate, DateTime? endDate)
         {
-        
+            var selectList = Common.Common.ToSelectListItems(typeof(Classify),(int?)classify);
             var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == CurrentUser().UserId);
-            if (classify.HasValue) where = where.And(x => x.Classify == (Classify)classify.Value);
+            if (classify.HasValue) where = where.And(x => x.Classify == classify.Value);
+            if (!title.IsEmpty()) where = where.And(x => x.ConsumeName.Contains(title));
+            if (startDate.HasValue) where = where.And(x => x.LogTime >= startDate.Value);
+            if (endDate.HasValue) where = where.And(x => x.LogTime < endDate.Value);
+
             var datas =await _customer.GetListAsync(where);
-            return View(datas);
+            ComsumeModel model = new ComsumeModel()
+            {
+                Consumes = datas,
+                StartDate = startDate,
+                EndDate = endDate,
+                SelectListItems = selectList,
+                Title = title
+            };
+            return View(model);
         }
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="classify"></param>
-        /// <param name="UserId"></param>
-        /// <returns></returns>
-        [Route("Index"),HttpPost,ValidateAntiForgeryToken]
-        public async  Task<IActionResult> IndexPost(int? classify = null)
-        {
-            var where = ExpressionExtension.True<ConsumeEntity>().And(x => x.UserId == CurrentUser().UserId);
-            if (classify.HasValue) where = where.And(x => x.Classify == (Classify)classify.Value);
-            var datas =await _customer.GetListAsync(where);
-            return View(nameof(Index),datas);
-        }
+      
 
         // GET: ComsumeController/Details/5
         public ActionResult Details(int id)

@@ -30,17 +30,17 @@ using System.Security.Claims;
 
 namespace Demo.Web
 {
-    /* Configure ºÍ ConfigureServices Ö§³Ö´°Ìå Configure<EnvironmentName> ºÍ Configure<EnvironmentName>Services µÄ»·¾³ÌØ¶¨°æ±¾¡£ 
-     * µ±Ó¦ÓÃÐèÒªÎª¶à¸ö»·¾³£¨Ã¿¸ö»·¾³ÓÐÐí¶à´úÂë²îÒì£©ÅäÖÃÆô¶¯Ê±£¬ÕâÖÖ·½·¨¾Í·Ç³£ÓÐÓÃ£º
+    /* Configure ï¿½ï¿½ ConfigureServices Ö§ï¿½Ö´ï¿½ï¿½ï¿½ Configure<EnvironmentName> ï¿½ï¿½ Configure<EnvironmentName>Services ï¿½Ä»ï¿½ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½æ±¾ï¿½ï¿½ 
+     * ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ÒªÎªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì£©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Í·Ç³ï¿½ï¿½ï¿½ï¿½Ã£ï¿½
      **/
     public class Startup
     {
         /// <summary>
-        /// ÅäÖÃÎÄ¼þ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
         /// </summary>
         public IConfiguration Configuration { get; set; }
         /// <summary>
-        /// »·¾³±äÁ¿
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public IWebHostEnvironment Env { get; set; }
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
@@ -55,7 +55,7 @@ namespace Demo.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<DbContext, MySqlDBContext>();
-            //×¢ÈëmysqlDbcontext
+            //×¢ï¿½ï¿½mysqlDbcontext
             services.AddDbContext<MySqlDBContext>(option =>
             {
                 option.UseMySql(
@@ -65,14 +65,14 @@ namespace Demo.Web
                     {
                     });
             });
-            ////×¢ÈëoracleDbcontext
+            ////×¢ï¿½ï¿½oracleDbcontext
             //services.AddDbContext<OracleDBContext>(option =>
             //{
             //    option.UseOracle(
             //        Configuration.GetConnectionString("oracle"),
             //        option =>
             //        {
-            //            //Êý¾ÝÉèÖÃ
+            //            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             //        });
             //});
             //services.AddDbContext<MSSQLDBContext>(option =>
@@ -84,12 +84,12 @@ namespace Demo.Web
 
             //        });
             //});
-            services.AddDataProtection();//¿ªÆôWindows DPAPI ×Ô¶¯¼ÓÃÜ  --ÓÃÓÚ¶Ô³Æ¼ÓÃÜ
+            services.AddDataProtection();//ï¿½ï¿½ï¿½ï¿½Windows DPAPI ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½  --ï¿½ï¿½ï¿½Ú¶Ô³Æ¼ï¿½ï¿½ï¿½
             services.AddResponseCompression();
-            services.AddControllersWithViews().AddRazorPagesOptions(options =>
-        {
-            options.Conventions.AuthorizePage("/Login/Login");
-        });
+            services.AddMvc().AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.AuthorizePage("/Login/Login");
+                }).AddRazorRuntimeCompilation();
             services.AddSession();
             services.AddMemoryCache();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -97,7 +97,7 @@ namespace Demo.Web
                 {
                     var cookiePolicyOptions = new CookiePolicyOptions
                     {
-                        //Ä¬ÈÏ MinimumSameSitePolicy ÖµÎª SameSiteMode.Lax ÔÊÐí OAuth2 authentication¡£ ÈôÒªÑÏ¸ñµØÇ¿ÖÆÖ´ÐÐÍ¬Ò»Õ¾µã²ßÂÔ ÉèÖÃ MinimumSameSitePolic=SameSiteMode.Strict
+                        //Ä¬ï¿½ï¿½ MinimumSameSitePolicy ÖµÎª SameSiteMode.Lax ï¿½ï¿½ï¿½ï¿½ OAuth2 authenticationï¿½ï¿½ ï¿½ï¿½Òªï¿½Ï¸ï¿½ï¿½Ç¿ï¿½ï¿½Ö´ï¿½ï¿½Í¬Ò»Õ¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ MinimumSameSitePolic=SameSiteMode.Strict
                         MinimumSameSitePolicy = SameSiteMode.Strict,
                     };
                 });
@@ -105,20 +105,20 @@ namespace Demo.Web
             {
                 options.AddPolicy("RequireAdministratorRole",
              policy => policy.Requirements.Add(new PermissionRequirement(
-                "/Home/visitDeny",// ¾Ü¾øÊÚÈ¨µÄÌø×ªµØÖ·
-                ClaimTypes.Name,//»ùÓÚÓÃ»§ÃûµÄÊÚÈ¨
-                expiration: TimeSpan.FromSeconds(60 * 5)//½Ó¿ÚµÄ¹ýÆÚÊ±¼ä
+                "/Home/visitDeny",// ï¿½Ü¾ï¿½ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Ö·
+                ClaimTypes.Name,//ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¨
+                expiration: TimeSpan.FromSeconds(60 * 5)//ï¿½Ó¿ÚµÄ¹ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
                 )));
             });
-            // ×¢ÈëÈ¨ÏÞ´¦ÀíÆ÷
+            // ×¢ï¿½ï¿½È¨ï¿½Þ´ï¿½ï¿½ï¿½ï¿½ï¿½
             services.AddTransient<IAuthorizationHandler, OwnerAuthorizationHandler>();
             services.ConfigureApplicationCookie(options =>
             {
-                options.AccessDeniedPath = "/Account/AccessDenied";//ÎÞÈ¨ÏÞ·ÃÎÊºó Ìø×ªµÄµØÖ·
+                options.AccessDeniedPath = "/Account/AccessDenied";//ï¿½ï¿½È¨ï¿½Þ·ï¿½ï¿½Êºï¿½ ï¿½ï¿½×ªï¿½Äµï¿½Ö·
                 options.Cookie.Name = "YourAppCookieName";
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromDays(30);
-                options.LoginPath =  "/Account/Login";
+                options.LoginPath = "/Account/Login";
                 // ReturnUrlParameter requires 
                 //using Microsoft.AspNetCore.Authentication.Cookies;
                 options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
@@ -130,10 +130,10 @@ namespace Demo.Web
             {
                 options.AllowSynchronousIO = true;
             });
-            services.AddDirectoryBrowser();//Æô¶¯Ä¿Â¼ä¯ÀÀ
+            services.AddDirectoryBrowser();//ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½ï¿½
 
 
-            services.AddScoped<IRepositoryFactory, RepositoryFactory>();//×¢²áÊý¾Ý¹¤³§
+            services.AddScoped<IRepositoryFactory, RepositoryFactory>();//×¢ï¿½ï¿½ï¿½ï¿½ï¿½Ý¹ï¿½ï¿½ï¿½
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IComsumeService, ComsumeService>();
@@ -147,10 +147,10 @@ namespace Demo.Web
             }
             else
             {
-                //·Ç¿ª·¢»·¾³£¬Ôò¼ÇÂ¼ÈÕÖ¾ £¬²¢´¦ÀíhttpÇëÇó
+                //ï¿½Ç¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Ö¾ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½httpï¿½ï¿½ï¿½ï¿½
                 app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             }
-            //×èÖ¹¿çÕ¾µã¹¥»÷XSRF/CSRF
+            //ï¿½ï¿½Ö¹ï¿½ï¿½Õ¾ï¿½ã¹¥ï¿½ï¿½XSRF/CSRF
             //app.Use(next => context =>
             //{
             //    string path = context.Request.Path.Value;
@@ -170,18 +170,18 @@ namespace Demo.Web
             app.UseAuthentication();
 
             app.UseSession();
-            app.UseResponseCompression();//ÏìÓ¦Ñ¹Ëõ£¬ ±ØÐë×¢²áÖÐ¼ä¼þservices.AddResponseCompression();
+            app.UseResponseCompression();//ï¿½ï¿½Ó¦Ñ¹ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½services.AddResponseCompression();
             app.UseResponseCaching();
             app.UseRouting();
-            app.UseHttpsRedirection();//HTTPSÌø×ª
-            app.UseStaticFiles();//¾²Ì¬ÎÄ¼þ
+            app.UseHttpsRedirection();//HTTPSï¿½ï¿½×ª
+            app.UseStaticFiles();//ï¿½ï¿½Ì¬ï¿½Ä¼ï¿½
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
           Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\Resource")),
                 RequestPath = new PathString("/src")
             });
-            //ÉèÖÃÄÜÖ±½ÓÔÚä¯ÀÀÆ÷Ô¤ÀÀµÄÎÄ¼þ¼ÐÓëÂ·¾¶
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
             app.UseDirectoryBrowser(new DirectoryBrowserOptions()
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Files")),
@@ -192,9 +192,9 @@ namespace Demo.Web
             {
                 endpoints.MapControllerRoute(
                         name: "areas",
-                        pattern: "{area:exists}/{controller=Account}/{action=Login}/{id?}"
+                        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                         );
-                endpoints.MapControllerRoute("default", "{controller=Account}/{action=Login}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

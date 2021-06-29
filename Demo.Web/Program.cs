@@ -17,7 +17,7 @@ namespace Demo.Web
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-            //ÔÚÔËÐÐÊ±Ó¦ÓÃÇ¨ÒÆ
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±Ó¦ï¿½ï¿½Ç¨ï¿½ï¿½
             //using (var scope = host.Services.CreateScope())
             //{
             //    var db = scope.ServiceProvider.GetRequiredService<MySqlDBContext>();

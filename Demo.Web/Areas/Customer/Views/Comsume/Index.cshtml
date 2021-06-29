@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Repository.Entity.Models.Consume.ConsumeEntity>
+﻿@model  Demo.Web.Areas.Customer.Data.ComsumeModel
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,14 +12,15 @@
         </div>
         <div class="block-content collapse in">
             <div class="span12">
-                <form method="post" asp-action="Index">
-                    <div class="span2">
-                        <label for="Classify" class="control-label"></label>
-                        <select id="Classify" name="Classify" asp-items="Html.GetEnumSelectList<Repository.Entity.Models.Consume.Classify>()" data-live-search="true"> <option value="">==全部==</option></select>
-                    </div>
-                    <div class="span1">
-                        <button class="btn btn-primary btn-outline-success my-2 my-sm-0" type="submit">查询</button>
-                    </div>
+                <form method="post" asp-action="Index" class="form-inline">
+                    <label for="Classify" class="control-label">分类：</label>
+                    <select class="form-control" name="Classify" asp-items="Model.SelectListItems" data-live-search="true">
+                    </select>
+                    <input asp-for="Title" class="form-control" placeholder="消费名称查询关键字..." />
+                    <label for="StartDate" class="control-label">消费时间：</label>
+                    <input asp-for="StartDate" class="form-control" />-
+                    <input asp-for="EndDate" class="form-control" />
+                    <button class="btn btn-primary btn-outline-success my-2 my-sm-0" type="submit">查询</button>
                 </form>
             </div>
             <div class="span12">
@@ -27,28 +28,28 @@
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.ConsumeName)
+                                @Html.DisplayNameFor( model=>model.Consumes.FirstOrDefault().ConsumeName)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Amount)
+                                @Html.DisplayNameFor(model => model.Consumes.FirstOrDefault().Amount)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Place)
+                                @Html.DisplayNameFor(model => model.Consumes.FirstOrDefault().Place)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Remark)
+                                @Html.DisplayNameFor(model => model.Consumes.FirstOrDefault().Remark)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Classify)
+                                @Html.DisplayNameFor(model => model.Consumes.FirstOrDefault().Classify)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.LogTime)
+                                @Html.DisplayNameFor(model => model.Consumes.FirstOrDefault().LogTime)
                             </th>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.Consumes)
                         {
                             <tr>
                                 <td>

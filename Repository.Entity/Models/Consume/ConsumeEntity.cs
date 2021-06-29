@@ -39,9 +39,15 @@ namespace Repository.Entity.Models.Consume
         [Comment("分类")]
         public Classify Classify { get; set; }
 
+        /// <summary>
+        /// 创建时间
+        /// </summary>
         [Display(Name = "创建时间")]
         [Comment("创建时间")]
         public DateTime CreateTime { get; set; }
+        /// <summary>
+        /// 消费时间
+        /// </summary>
         [Display(Name = "消费时间")]
         [Comment("消费时间")]
         public DateTime LogTime { get; set; }
