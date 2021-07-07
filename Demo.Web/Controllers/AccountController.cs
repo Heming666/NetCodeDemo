@@ -25,6 +25,7 @@ namespace Demo.Web.Controllers
         private readonly IUserService _userService;
         private readonly IDepartmentService _deptService;
         private readonly IWebHostEnvironment _hosting;
+        private readonly NLog.Logger logger;
         /// <summary>
         /// 数据加密
         /// </summary>
@@ -36,6 +37,7 @@ namespace Demo.Web.Controllers
             _userService = userService;
             _deptService = deptService;
             _hosting = hosting;
+            logger = NLog.LogManager.GetCurrentClassLogger();
         }
         /// <summary>
         /// 登录页面
@@ -56,6 +58,7 @@ namespace Demo.Web.Controllers
                 }
                 catch (System.Security.Cryptography.CryptographicException ex)
                 {
+                    logger.ErrorException("秘钥过期", ex);
                     //大概率是DPAPI 私钥过期  
                 }
 

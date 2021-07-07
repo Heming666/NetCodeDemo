@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Repository.Entity.Models.Base;
 using Repository.Entity.Models.Consume;
+using Repository.Map.Base;
+using Repository.Map.Consume;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,27 +41,13 @@ namespace Repository.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region 用户表 UserEntity
-            modelBuilder.Entity<UserEntity>(entity =>
-            {
-                entity.ToTable("Base_UserInfo");
-                entity.HasOne(x => x.DeptInfo).WithMany(p => p.Users).IsRequired();
-                entity.HasIndex(x => x.UserName).IsUnique();
-                entity.HasIndex(x => x.Account).IsUnique();
-                entity.HasMany(x => x.ConsumeEntitys).WithOne().OnDelete(DeleteBehavior.Cascade);
-            });
-            #endregion
+
             //.HasDefaultValueSql("NOW()");  数据库函数
             //   .HasComputedColumnSql("LEN([LastName]) + LEN([FirstName])", stored: true); 虚拟 计算列，每次从数据库中提取值时都会计算其值。 您还可以指定将计算列 存储 (有时称为 持久化) ，这意味着在每次更新行时计算，并将磁盘与常规列一起存储：
-            #region 部门表
-            modelBuilder.Entity<DepartmentEntity>().ToTable("Base_Department").HasMany(x => x.Users).WithOne().OnDelete(DeleteBehavior.Cascade);
-            #endregion
-            #region 消费支出明细表
-            modelBuilder.Entity<ConsumeEntity>(entity => {
-                entity.ToTable("User_ConsumeEntity").HasOne(x => x.User).WithMany(x => x.ConsumeEntitys);
-                entity.Property(x => x.Amount).HasColumnType("decimal(8,2)");
-            });
-            #endregion
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserMap).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DepartmentMap).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ConsumeMap).Assembly);
         }
 
         /// <summary>

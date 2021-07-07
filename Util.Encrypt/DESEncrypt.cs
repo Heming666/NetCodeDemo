@@ -20,12 +20,16 @@ namespace Util.Encrypt
         public static string EncryptString(string sInputString, string sKey, string sIV)
         {
             byte[] data = Encoding.UTF8.GetBytes(sInputString);
-            DESCryptoServiceProvider DES = new DESCryptoServiceProvider();
-            DES.Key = Encoding.ASCII.GetBytes(sKey);
-            DES.IV = Encoding.ASCII.GetBytes(sIV);
-            ICryptoTransform desencrypt = DES.CreateEncryptor();
-            byte[] result = desencrypt.TransformFinalBlock(data, 0, data.Length);
-            return BitConverter.ToString(result);
+            using (DESCryptoServiceProvider DES = new DESCryptoServiceProvider
+            {
+                Key = Encoding.ASCII.GetBytes(sKey),
+                IV = Encoding.ASCII.GetBytes(sIV)
+            })
+            {
+                ICryptoTransform desencrypt = DES.CreateEncryptor();
+                byte[] result = desencrypt.TransformFinalBlock(data, 0, data.Length);
+                return BitConverter.ToString(result);
+            }
         }
 
 

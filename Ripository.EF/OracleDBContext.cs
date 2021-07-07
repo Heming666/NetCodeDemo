@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Repository.Entity.Models.Base;
+using Repository.Entity.Models.Consume;
+using Repository.Map.Base;
+using Repository.Map.Consume;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,9 +45,23 @@ namespace Repository.EF
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder model)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserMap).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DepartmentMap).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ConsumeMap).Assembly);
         }
+        /// <summary>
+        /// 用户表
+        /// </summary>
+        public DbSet<UserEntity> Users { get; set; }
+        /// <summary>
+        /// 部门表
+        /// </summary>
+        public DbSet<DepartmentEntity> Departments { get; set; }
+        /// <summary>
+        /// 用户支出明细表
+        /// </summary>
+        public DbSet<ConsumeEntity> Consumies { get; set; }
     }
 }
