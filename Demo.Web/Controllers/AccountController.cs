@@ -158,6 +158,8 @@ namespace Demo.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                ModelStateEntry modelStateEntry = default(ModelStateEntry);
+                ModelState.TryGetValue(user.Account, out modelStateEntry);
                 var file = Request.Form.Files["Photo"];
                 if (file != null)
                 {

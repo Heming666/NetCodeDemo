@@ -97,7 +97,8 @@ namespace Demo.Web
                 {
                     var cookiePolicyOptions = new CookiePolicyOptions
                     {
-                        //Ĭ�� MinimumSameSitePolicy ֵΪ SameSiteMode.Lax ���� OAuth2 authentication�� ��Ҫ�ϸ��ǿ��ִ��ͬһվ����� ���� MinimumSameSitePolic=SameSiteMode.Strict
+
+                        //MinimumSameSitePolicy = SameSiteMode.Lax,//OAuth2验证需允许跨越站点
                         MinimumSameSitePolicy = SameSiteMode.Strict,
                     };
                 });
@@ -105,9 +106,9 @@ namespace Demo.Web
             {
                 options.AddPolicy("RequireAdministratorRole",
              policy => policy.Requirements.Add(new PermissionRequirement(
-                "/Home/visitDeny",// �ܾ���Ȩ����ת��ַ
-                ClaimTypes.Name,//�����û�������Ȩ
-                expiration: TimeSpan.FromSeconds(60 * 5)//�ӿڵĹ���ʱ��
+                "/Home/visitDeny",// 验证未通过后跳转的地址
+                ClaimTypes.Name,//验证的策略的属性
+                expiration: TimeSpan.FromSeconds(60 * 5)//身份过期时间
                 )));
             });
             // ע��Ȩ�޴�����

@@ -25,8 +25,8 @@ namespace Repository.Entity.Models.Base
         /// <summary>
         /// 账户
         /// </summary>
-        [Remote(action: "VerifyAccount", controller: "Login", AdditionalFields = nameof(Account))]
-        [Required(ErrorMessage ="账号不能为空"),MinLength(2,ErrorMessage ="账号的最小长度不能少于2"),MaxLength(24), Comment("账户"), Display(Name = "账号")]
+        [Remote(action: "VerifyAccount", controller: "Account", areaName:"", AdditionalFields = nameof(Account))]
+        [Required(ErrorMessage ="账号不能为空"),MinLength(2,ErrorMessage ="账号的最小长度不能少于2"),MaxLength(24,ErrorMessage ="最大长度为24"), Comment("账户"), Display(Name = "账号")]
         [RegularExpression("^\\w{2,24}$", ErrorMessage = "2至24位数字、字母或者下划线")]
         //[ConcurrencyCheck]并发标记
         public string  Account { get; set; }
