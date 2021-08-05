@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Util.Cache;
 
 namespace Demo.Web
 {
@@ -54,6 +55,7 @@ namespace Demo.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ICache>(options => new RedisCache(Configuration.GetConnectionString("RedisConStr")));
             services.AddScoped<DbContext, MySqlDBContext>();
             //ע��mysqlDbcontext
             services.AddDbContext<MySqlDBContext>(option =>

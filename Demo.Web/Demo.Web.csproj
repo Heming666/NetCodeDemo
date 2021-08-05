@@ -36,6 +36,7 @@
     <ProjectReference Include="..\Business.Service\Business.Service.csproj" />
     <ProjectReference Include="..\Repository.Entity\Repository.Entity.csproj" />
     <ProjectReference Include="..\Ripository.EF\Repository.EF.csproj" />
+    <ProjectReference Include="..\Util.Cache\Util.Cache.csproj" />
     <ProjectReference Include="..\Util.Encrypt\Util.Encrypt.csproj" />
     <ProjectReference Include="..\Util.Extension\Util.Extension.csproj" />
     <ProjectReference Include="..\Util.Log\Util.Log.csproj" />

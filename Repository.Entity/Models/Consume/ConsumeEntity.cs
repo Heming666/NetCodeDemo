@@ -48,7 +48,7 @@ namespace Repository.Entity.Models.Consume
         /// <summary>
         /// 消费时间
         /// </summary>
-        [Display(Name = "消费时间")]
+        [Display(Name = "消费时间"),DataType(DataType.DateTime,ErrorMessage ="请输入时间类型"),DisplayFormat(DataFormatString ="{0:yyyy-MM-dd}",ApplyFormatInEditMode =true)]
         [Comment("消费时间")]
         public DateTime LogTime { get; set; }
 

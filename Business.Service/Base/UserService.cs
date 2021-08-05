@@ -18,7 +18,7 @@ namespace Business.Service.Base
 
         public Task<bool> ExistsAccount(string account)
         {
-            return AnyAsync(p => p.UserName == account);
+            return AnyAsync(p => p.Account == account);
         }
 
         public async Task<UserEntity> GetEntity(Expression<Func<UserEntity, bool>> expression)

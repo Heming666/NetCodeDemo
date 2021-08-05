@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Util.Cache
 {
-    public class RedisCache : ICache<RedisCache>
+    public class RedisCache : ICache
     {
         /// <summary>
         /// 链接字符串
@@ -25,7 +25,7 @@ namespace Util.Cache
             __connStr = connStr;
             try
             {
-                redisMultiplexer = ConnectionMultiplexer.Connect(connStr);
+                redisMultiplexer = ConnectionMultiplexer.Connect(configuration: connStr);
                 db = redisMultiplexer.GetDatabase();
             }
             catch (Exception ex)
@@ -42,17 +42,16 @@ namespace Util.Cache
         /// <param name="db">要连接的db</param>
         /// <param name="connStr">连接字符串</param>
         /// <returns></returns>
-        public RedisCache Current(int dbIndex = 0, string connStr = null)
+        public void ChangeDB(int dbIndex = 0, string connStr = null)
         {
             if (!string.IsNullOrEmpty(connStr))
             {
                 __connStr =connStr;
             }
-            redisMultiplexer = ConnectionMultiplexer.Connect(connStr);
+            redisMultiplexer = ConnectionMultiplexer.Connect(configuration: connStr);
             db = redisMultiplexer.GetDatabase(dbIndex);
-            return this;
         }
-        public Task<bool> SetStringKey(string key, string value, TimeSpan? expiry = default(TimeSpan?))
+        public Task<bool> SetStringKey(string key, string value, TimeSpan? expiry = default)
         {
             return Task.Run(() =>
             {
@@ -102,7 +101,7 @@ namespace Util.Cache
         /// 保存一个对象
         /// </summary>
         /// <param name="obj"></param>
-        public Task<bool> SetStringKey<T>(string key, T obj, TimeSpan? expiry = default(TimeSpan?)) where T : class, new()
+        public Task<bool> SetStringKey<T>(string key, T obj, TimeSpan? expiry = default) where T : class, new()
         {
             return Task.Run(() =>
             {
@@ -114,7 +113,7 @@ namespace Util.Cache
                 return db.StringSet(key, json, expiry);
             });
         }
-        public Task<bool> SetList<T>(string key, T obj, TimeSpan? expiry = default(TimeSpan?)) where T : class, new()
+        public Task<bool> SetList<T>(string key, T obj, TimeSpan? expiry = default) where T : class, new()
         {
             return Task.Run(() =>
             {
@@ -126,7 +125,7 @@ namespace Util.Cache
                 return db.ListLeftPushAsync(key, json).Result > 0;
             });
         }
-        public Task<bool> SetList<T>(string key, List<T> objList, TimeSpan? expiry = default(TimeSpan?)) where T : class, new()
+        public Task<bool> SetList<T>(string key, List<T> objList, TimeSpan? expiry = default) where T : class, new()
         {
             return Task.Run(() =>
             {
@@ -134,7 +133,7 @@ namespace Util.Cache
                 {
                     return false;
                 }
-                List<RedisValue> redisValues = new List<RedisValue>();
+                List<RedisValue> redisValues = new();
                 if (objList != null && objList.Count > 0)
                 {
                     foreach (var item in objList)
@@ -147,7 +146,7 @@ namespace Util.Cache
                 return false;
             });
         }
-        public Task<List<T>> GetList<T>(string key, TimeSpan? expiry = default(TimeSpan?)) where T : class, new()
+        public Task<List<T>> GetList<T>(string key) where T : class, new()
         {
             return Task.Run(() =>
             {
@@ -158,7 +157,7 @@ namespace Util.Cache
                 var value = db.ListRangeAsync(key);
                 if (value != null && value.Result.Length > 0)
                 {
-                    List<T> list = new List<T>();
+                    List<T> list = new();
                     foreach (var item in value.Result)
                     {
                         list.Add(JsonConvert.DeserializeObject<T>(item));
@@ -168,7 +167,7 @@ namespace Util.Cache
                 return null;
             });
         }
-        public Task<bool> HashSet<T>(string key, T obj, string fielId, TimeSpan? expiry = default(TimeSpan?)) where T : class, new()
+        public Task<bool> HashSet<T>(string key, T obj, string fielId, TimeSpan? expiry = default) where T : class, new()
         {
             return Task.Run(() =>
             {
@@ -180,7 +179,7 @@ namespace Util.Cache
                 return db.HashSet(key, fielId, json);
             });
         }
-        public Task<bool> HashSet(string key, HashEntry[] hashEntries, TimeSpan? expiry = default(TimeSpan?))
+        public Task<bool> HashSet(string key, HashEntry[] hashEntries, TimeSpan? expiry = default)
         {
             return Task.Run(() =>
             {
@@ -192,7 +191,7 @@ namespace Util.Cache
                 return true;
             });
         }
-        public Task<List<T>> HashGetAll<T>(string key, TimeSpan? expiry = default(TimeSpan?)) where T : class, new()
+        public Task<List<T>> HashGetAll<T>(string key, TimeSpan? expiry = default) where T : class, new()
         {
             return Task.Run(() =>
             {
@@ -213,7 +212,7 @@ namespace Util.Cache
                 return null;
             });
         }
-        public Task<List<T>> HashGet<T>(string key, RedisValue[] fielIds, TimeSpan? expiry = default(TimeSpan?)) where T : class, new()
+        public Task<List<T>> HashGet<T>(string key, RedisValue[] fielIds, TimeSpan? expiry = default) where T : class, new()
         {
             return Task.Run(() =>
             {
@@ -234,7 +233,7 @@ namespace Util.Cache
                 return null;
             });
         }
-        public Task<T> HashGet<T>(string key, string fielId, TimeSpan? expiry = default(TimeSpan?)) where T : class, new()
+        public Task<T> HashGet<T>(string key, string fielId, TimeSpan? expiry = default) where T : class, new()
         {
             return Task.Run(() =>
             {
@@ -250,6 +249,10 @@ namespace Util.Cache
                 return JsonConvert.DeserializeObject<T>(value);
             });
         }
-   
+
+        public Task<bool> KeyExistsAsync(string key)
+        {
+            return db.KeyExistsAsync(key);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Business.IService.Base;
+using Demo.Web.Common.Caches;
 using Demo.Web.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Util.Cache;
 using Util.Extension;
 using Util.Log;
 
@@ -15,16 +17,23 @@ namespace Demo.Web.Areas.Base.Controllers
     [Area("Base")]
     public class DeptController : BaseController
     {
+        private readonly ICache cache;
+        private readonly DeptCache deptCache;
+
         private IDepartmentService _deptService { get; }
 
-        public DeptController( IDepartmentService departmentService)
+        public DeptController(
+            IDepartmentService departmentService,
+            ICache cache)
         {
             _deptService = departmentService;
+            this.cache = cache;
+            deptCache = new DeptCache(departmentService, cache);
         }
         // GET: DeptController
         public async Task<IActionResult> Index()
-        {
-           var depts =await _deptService.GetList(ExpressionExtension.True<DepartmentEntity>());
+{
+            var depts = await deptCache.LoadDepts();
             return View(depts);
         }
 
@@ -48,6 +57,7 @@ namespace Demo.Web.Areas.Base.Controllers
             try
             {
                await _deptService.Insert(entity);
+                await deptCache.RefreshDepts();
                 return RedirectToAction(nameof(Index));
             }
             catch

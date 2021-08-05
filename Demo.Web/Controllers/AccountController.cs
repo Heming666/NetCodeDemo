@@ -1,4 +1,5 @@
 ﻿using Business.IService.Base;
+using Demo.Web.Common.Caches;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -14,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Util.Cache;
 using Util.Encrypt;
 using Util.Extension;
 using Util.Log;
@@ -24,20 +26,31 @@ namespace Demo.Web.Controllers
     {
         private readonly IUserService _userService;
         private readonly IDepartmentService _deptService;
+        private readonly IDataProtectionProvider protector;
         private readonly IWebHostEnvironment _hosting;
+        private readonly ICache cache;
         private readonly NLog.Logger logger;
+        private readonly DeptCache deptCache;
         /// <summary>
         /// 数据加密
         /// </summary>
         private readonly IDataProtector _protector;
-        public AccountController( IUserService userService, IDepartmentService deptService, IDataProtectionProvider protector, IWebHostEnvironment hosting) 
+        public AccountController(
+            IUserService userService,
+            IDepartmentService deptService,
+            IDataProtectionProvider protector,
+            IWebHostEnvironment hosting,
+            ICache cache)
         {
             string key = "PublicKey";//key为加密公钥，私钥为系统自动维护    
             _protector = protector.CreateProtector(key);
             _userService = userService;
             _deptService = deptService;
+            this.protector = protector;
             _hosting = hosting;
+            this.cache = cache;
             logger = NLog.LogManager.GetCurrentClassLogger();
+            deptCache = new DeptCache(deptService, cache);
         }
         /// <summary>
         /// 登录页面
@@ -93,8 +106,8 @@ namespace Demo.Web.Controllers
                                         new Claim(ClaimTypes.GroupSid,user.DeptId.ToString()),
                                            new Claim(ClaimTypes.WindowsDeviceGroup,user.DeptInfo.DeptName)
                                     };
-               
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 var authProperties = new AuthenticationProperties
                 {
@@ -126,11 +139,11 @@ namespace Demo.Web.Controllers
                 if (!isRemember.IsEmpty() && isRemember.Equals("remember-me"))
                 {
                     //采用对称加密，对用户信息进行加密.。写入cookie
-                    string cookieValue = JsonConvert.SerializeObject(new { user.Account,user.PassWord});
+                    string cookieValue = JsonConvert.SerializeObject(new { user.Account, user.PassWord });
                     string encyptString = _protector.Protect(cookieValue);//加密
-                    HttpContext.Response.Cookies.Append("User_Account", encyptString, new CookieOptions() { Expires = DateTimeOffset.UtcNow.AddDays(30),  });
+                    HttpContext.Response.Cookies.Append("User_Account", encyptString, new CookieOptions() { Expires = DateTimeOffset.UtcNow.AddDays(30), });
                 }
-             
+
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
@@ -148,7 +161,7 @@ namespace Demo.Web.Controllers
         public async Task<IActionResult> Register()
         {
             UserEntity entity = new UserEntity() { CreateDate = DateTime.Now };
-            var depts = await _deptService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
+            var depts = await deptCache.LoadDepts();
             ViewBag.Depts = depts;
             return View(entity);
         }
@@ -158,9 +171,15 @@ namespace Demo.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ModelStateEntry modelStateEntry = default(ModelStateEntry);
-                ModelState.TryGetValue(user.Account, out modelStateEntry);
                 var file = Request.Form.Files["Photo"];
+                if (await _userService.ExistsAccount(user.Account))
+                {
+                    ModelState.AddModelError<UserEntity>(p => p.Account, "账号已经被注册");
+                    var depts = await deptCache.LoadDepts();
+                    ViewBag.Depts = depts;
+                    user.CreateDate = DateTime.Now;
+                    return View(user);
+                }
                 if (file != null)
                 {
                     string newfileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
@@ -180,7 +199,7 @@ namespace Demo.Web.Controllers
             }
             else
             {
-                var depts = await _deptService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
+                var depts = await deptCache.LoadDepts();
                 ViewBag.Depts = depts;
                 user.CreateDate = DateTime.Now;
                 return View(user);
@@ -202,9 +221,25 @@ namespace Demo.Web.Controllers
             return Json(true);
         }
 
-        public async Task<IActionResult> LoginOutAsync()
+        public async Task<IActionResult> LoginOut()
         {
             await HttpContext.SignOutAsync();
+            var cookieValue = HttpContext.Request.Cookies["User_Account"];
+            if (!cookieValue.IsEmpty())
+            {
+                try
+                {
+                    dynamic UserInfo = JsonConvert.DeserializeAnonymousType(_protector.Unprotect(cookieValue), new { Account = string.Empty, PassWord = string.Empty });
+                    if (User.Claims.Any(x => x.Value == UserInfo.Account)) HttpContext.Response.Cookies.Delete("User_Account");
+                    //此处可以不经过登录，直接进入平台
+                }
+                catch (System.Security.Cryptography.CryptographicException ex)
+                {
+                    logger.ErrorException("秘钥过期", ex);
+                    //大概率是DPAPI 私钥过期  
+                }
+
+            }
             return RedirectToAction(nameof(Login));
         }
     }
