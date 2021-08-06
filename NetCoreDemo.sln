@@ -31,7 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Encrypt", "Util.Encryp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Cache", "Util.Cache\Util.Cache.csproj", "{77A26139-D1A9-4B76-8F0B-E37CC83BCB0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.Map", "Repository.Map\Repository.Map.csproj", "{CCA9BEB0-C668-4714-B8C2-3AA2ED07B268}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository.Map", "Repository.Map\Repository.Map.csproj", "{CCA9BEB0-C668-4714-B8C2-3AA2ED07B268}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Api", "Demo.Api\Demo.Api.csproj", "{D19353B9-93B7-4B6F-9B24-7CC2B763D23D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 		{CCA9BEB0-C668-4714-B8C2-3AA2ED07B268}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCA9BEB0-C668-4714-B8C2-3AA2ED07B268}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCA9BEB0-C668-4714-B8C2-3AA2ED07B268}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D19353B9-93B7-4B6F-9B24-7CC2B763D23D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D19353B9-93B7-4B6F-9B24-7CC2B763D23D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D19353B9-93B7-4B6F-9B24-7CC2B763D23D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D19353B9-93B7-4B6F-9B24-7CC2B763D23D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +105,7 @@ Global
 		{07B0BB15-5F4D-4C69-AB43-B477151EE9FF} = {444B420C-98A2-492F-9D45-EFFCD4A5E823}
 		{77A26139-D1A9-4B76-8F0B-E37CC83BCB0C} = {444B420C-98A2-492F-9D45-EFFCD4A5E823}
 		{CCA9BEB0-C668-4714-B8C2-3AA2ED07B268} = {A7BC1388-1E6F-45A5-B977-94DD173E6F73}
+		{D19353B9-93B7-4B6F-9B24-7CC2B763D23D} = {6175EC20-F14E-42C6-913B-01DF9DC0B6E3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36ADBBFF-C964-469A-A089-BCFAF1AA2AAE}

@@ -17,7 +17,7 @@ namespace Demo.Web.Common.Caches
             IDepartmentService departmentService,
             ICache cache)
         {
-            this.departmentService = departmentService;
+            this.departmentService = departmentService as IDepartmentService;
             this.cache = cache;
         }
 
@@ -32,14 +32,14 @@ namespace Demo.Web.Common.Caches
             if (depts == null)
             {
                 depts = await departmentService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
-                await cache.SetList("list_Department", depts, TimeSpan.FromHours(1));
+                await cache.SetList("list_Department", depts, TimeSpan.FromHours(10));
             }
             return depts;
         }
         public async Task RefreshDepts()
         {
             var depts = await departmentService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
-            await cache.SetList("list_Department", depts, TimeSpan.FromHours(1));
+            await cache.SetList("list_Department", depts, TimeSpan.FromHours(10));
         }
         public async Task SetDept(DepartmentEntity dept)
         {
@@ -50,8 +50,10 @@ namespace Demo.Web.Common.Caches
             else
             {
                 var depts = await departmentService.GetList(Util.Extension.ExpressionExtension.True<DepartmentEntity>());
-                await cache.SetList("list_Department", depts, TimeSpan.FromHours(1));
+                await cache.SetList("list_Department", depts, TimeSpan.FromHours(10));
             }
         }
+
+
     }
 }
