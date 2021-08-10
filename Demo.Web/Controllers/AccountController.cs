@@ -94,8 +94,6 @@ namespace Demo.Web.Controllers
                 UserEntity user = await _userService.GetEntity(p => p.Account == account);
                 if (user is null) throw new Exception("账号或密码错误");
                 if (!(user.PassWord.Equals(password) || user.PassWord.Equals(MD5Encrypt.MD5Encrypt16(password)))) throw new Exception("账号或密码错误");
-
-
                 //记住密码
                 var claims = new List<Claim>
                                     {
@@ -104,11 +102,9 @@ namespace Demo.Web.Controllers
                                         new Claim(ClaimTypes.Role, user.DeptInfo.DeptName),
                                         new Claim(ClaimTypes.PrimarySid,user.ID.ToString()),
                                         new Claim(ClaimTypes.GroupSid,user.DeptId.ToString()),
-                                           new Claim(ClaimTypes.WindowsDeviceGroup,user.DeptInfo.DeptName)
+                                        new Claim(ClaimTypes.WindowsDeviceGroup,user.DeptInfo.DeptName)
                                     };
-
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
                 var authProperties = new AuthenticationProperties
                 {
                     // Whether the authentication session is persisted across 
@@ -116,22 +112,14 @@ namespace Demo.Web.Controllers
                     // whether the cookie's lifetime is absolute (matching the
                     // lifetime of the authentication ticket) or session-based.
                     IsPersistent = true,
-
                     // The time at which the authentication ticket expires. A 
                     // value set here overrides the ExpireTimeSpan option of 
                     // CookieAuthenticationOptions set with AddCookie.
                     ExpiresUtc = DateTime.UtcNow.AddMinutes(30),
-
                     // Refreshing the authentication session should be allowed.
                     AllowRefresh = true,
-
-
-
-
                     // The time at which the authentication ticket was issued.
                     //IssuedUtc = <DateTimeOffset>,
-
-
                     RedirectUri = Url.Action(nameof(Login))   // The full path or absolute URI to be used as an http  // redirect response value.
                 };
 
